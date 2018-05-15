@@ -17,7 +17,7 @@
 <meta property="og:description" content="java 优化建议">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/13/java-优化/直接.png">
-<meta property="og:updated_time" content="2018-05-15T15:29:33.391Z">
+<meta property="og:updated_time" content="2018-05-15T15:34:23.750Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java 优化">
 <meta name="twitter:description" content="java 优化建议">
@@ -203,18 +203,14 @@
 </ol>
 <ol start="2">
 <li><p>类加载检查后，虚拟机会给新生对象分配内存，分配内存有两种方式（由垃圾收集器是否带有压缩整理功能决定）</p>
-<ul>
-<li>指针碰撞：如果堆中内存是规整的（用过的和空闲的各放一边），分界点放着指示器（一个指针）分配内存就是把指针向空闲空间的一边移对象大小相等的距离。</li>
-<li>空闲列表：如果堆中内存不是规整的，虚拟机需要维护一张记录那块内存可用的表，分配时就从列表中找到一块足够大的空间分配给实例对象，并更新列表记录.</li>
-</ul>
+<p>  ​    a、指针碰撞：如果堆中内存是规整的（用过的和空闲的各放一边），分界点放着指示器（一个指针）分配内存就是把指针向空闲空间的一边移对象大小相等的距离。</p>
+<p>  ​    b、空闲列表：如果堆中内存不是规整的，虚拟机需要维护一张记录那块内存可用的表，分配时就从列表中找到一块足够大的空间分配给实例对象，并更新列表记录.</p>
 </li>
 </ol>
 <ol start="3">
 <li><p>对象创建的线程安全，解决方案</p>
-<ul>
-<li>对分配内存空间的动作进行同步</li>
-<li>把分配内存操作按线程划分不同空间之中进行，即给每个线程在堆中预先分配一块小内存，那个线程要创建对象，就在那个线程的TAB上分配，线程内存满时，新的TABE才同步锁定  </li>
-</ul>
+<p>  ​    a、对分配内存空间的动作进行同步</p>
+<p>  ​    b、把分配内存操作按线程划分不同空间之中进行，即给每个线程在堆中预先分配一块小内存，那个线程要创建对象，就在那个线程的TAB上分配，线程内存满时，新的TABE才同步锁定  </p>
 </li>
 </ol>
 <ol start="4">
@@ -276,7 +272,7 @@
 </li>
 <li><p>弱引用（WeakReference）:通过软引用声明，JVM会尽量让软引用存活更久，迫不得已才清理</p>
 </li>
-<li><p>虚引用（PhantomReference）:通过虚引用声明，，每次垃圾回收时都会被回收，所以获取虚引用里的对象是总是为空</p>
+<li><p>虚引用（PhantomReference）:通过虚引用声明，，每次垃圾回收时都会被回收，所以获取虚引用里的对象是总是为空s</p>
 </li>
 </ol>
 <h2 id="十七、垃圾回收算法"><a href="#十七、垃圾回收算法" class="headerlink" title="十七、垃圾回收算法"></a>十七、垃圾回收算法</h2><ol>
