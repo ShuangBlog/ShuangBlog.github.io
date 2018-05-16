@@ -17,7 +17,7 @@
 <meta property="og:description" content="java 优化建议">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/13/java-优化/直接.png">
-<meta property="og:updated_time" content="2018-05-16T15:19:55.795Z">
+<meta property="og:updated_time" content="2018-05-16T15:31:13.061Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java 优化">
 <meta name="twitter:description" content="java 优化建议">
@@ -169,7 +169,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、采用Clone-方式创建对象"><a href="#一、采用Clone-方式创建对象" class="headerlink" title="一、采用Clone() 方式创建对象"></a>一、采用Clone() 方式创建对象</h2><p>在java.lang.Object 中有一个clone()方法，它返回的是一个新的对象。和 ‘new’ 关键字返回的对象不同，这个新对象会包含一些原来对象的信息，不是对象的初始信息。一个对象实现Cloneable接口，通过调用clone()方法拷贝出一个新对象，这个过程不会调用任何的构造函数。</p>
+        <h2 id="一、采用Clone-方式创建对象"><a href="#一、采用Clone-方式创建对象" class="headerlink" title="一、采用Clone() 方式创建对象"></a>一、采用Clone() 方式创建对象</h2><p>​    在java.lang.Object 中有一个clone()方法，它返回的是一个新的对象。和 ‘new’ 关键字返回的对象不同，这个新对象会包含一些原来对象的信息，不是对象的初始信息。一个对象实现Cloneable接口，通过调用clone()方法拷贝出一个新对象，这个过程不会调用任何的构造函数。</p>
 <h2 id="二、减少对boolean判断"><a href="#二、减少对boolean判断" class="headerlink" title="二、减少对boolean判断"></a>二、减少对boolean判断</h2><ol>
 <li>代码执行更快</li>
 <li>代码变得简洁</li>
@@ -180,7 +180,7 @@
 <li>条件操作符更加简洁</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//if else 方式</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">test</span> <span class="params">(<span class="keyword">boolean</span> flag)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//操作符方式</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">testT</span><span class="params">(<span class="keyword">boolean</span> flag)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> flag?<span class="number">0</span>:<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="四、静态方法代替实例方法"><a href="#四、静态方法代替实例方法" class="headerlink" title="四、静态方法代替实例方法"></a>四、静态方法代替实例方法</h2><p>区别</p>
+<h2 id="四、静态方法代替实例方法"><a href="#四、静态方法代替实例方法" class="headerlink" title="四、静态方法代替实例方法"></a>四、静态方法代替实例方法</h2><p>​    区别 ：</p>
 <ol>
 <li>外部调用静态方法，无需创建对象，可以使用”类名.方法名”，也可以使用”对象名.方法名”；而实例方法只能通过”对象名.方法名”方式</li>
 <li>静态方法只允许访问本类静态成员(静态成员变量和静态方法)，实例方法无限制</li>
@@ -209,18 +209,18 @@
 
 <p>4、内存分配完成后，虚拟机需要将内存出生后喂零值；然后对对象进行必要设置（如：类的元数据）</p>
 <p>5、最后，需要执行init() 方法，把对象安卓程序员意愿进行初始化</p>
-<h2 id="八、对象内存布局"><a href="#八、对象内存布局" class="headerlink" title="八、对象内存布局"></a>八、对象内存布局</h2><p>对象分为三部分</p>
+<h2 id="八、对象内存布局"><a href="#八、对象内存布局" class="headerlink" title="八、对象内存布局"></a>八、对象内存布局</h2><p>对象分为三部分：</p>
 <ol>
 <li>对象头：①、对象运行时数据/Mark Word（哈希码，GC分代年龄、线程持有的锁等） ②、类型指针（指向元数据的指针），通过这个指针确定此对象是哪个类德实例(GC :  Garbage Collection,垃圾收集,垃圾回收 )</li>
 <li>实例数据:程序代码中定义的各种类型的字段内容</li>
 <li>对齐填充：不是必然，起到占位符作用。HotPot VM要求对象起始地址必须为8字节，对象头为8字节，实例数据可能不是8字节，对齐填充用来对齐实例数据没有对齐的办法</li>
 </ol>
-<h2 id="九、对象访问定位"><a href="#九、对象访问定位" class="headerlink" title="九、对象访问定位"></a>九、对象访问定位</h2><p>java通过栈中的reference数据操作堆中的具体对象，访问方式有两种</p>
+<h2 id="九、对象访问定位"><a href="#九、对象访问定位" class="headerlink" title="九、对象访问定位"></a>九、对象访问定位</h2><p>java通过栈中的reference数据操作堆中的具体对象，访问方式有两种：</p>
 <p>​    1.句柄：堆会划分一块内存作为句柄池，引用里存储着句柄地址，句柄中包含对象实例数据和类型数据的具体地址信息</p>
 <p>​    2.直接指针：引用存储的是对象地址</p>
 <p><img src="/2018/05/13/java-优化/直接.png" alt=""></p>
 <h2 id="十、集和内避免返回null"><a href="#十、集和内避免返回null" class="headerlink" title="十、集和内避免返回null"></a>十、集和内避免返回null</h2><p>​    在返回数组或集和方法中，如果需要返回空数据，尽量不要返回null，而是返回大小为零的数组或集和，这样，在判断方法返回值时就不会报NullPointerException异常</p>
-<h2 id="十一、ArrayList、LinkedList和Vector比较"><a href="#十一、ArrayList、LinkedList和Vector比较" class="headerlink" title="十一、ArrayList、LinkedList和Vector比较"></a>十一、ArrayList、LinkedList和Vector比较</h2><p>相同：它们均实现AbstractList，AbstractList扩展自AbstractCollection，并直接实现List接口AbstractList最大限度减少了”随即访问”随即存储（如：数组）支持的接口的工作。对于连续的访问随即（如链表），应优先使用AbstractSequentiaList，此接口最大限度减少”连续访问”数据存储接口的工作</p>
+<h2 id="十一、ArrayList、LinkedList和Vector比较"><a href="#十一、ArrayList、LinkedList和Vector比较" class="headerlink" title="十一、ArrayList、LinkedList和Vector比较"></a>十一、ArrayList、LinkedList和Vector比较</h2><p>​    相同：它们均实现AbstractList，AbstractList扩展自AbstractCollection，并直接实现List接口AbstractList最大限度减少了”随即访问”随即存储（如：数组）支持的接口的工作。对于连续的访问随即（如链表），应优先使用AbstractSequentiaList，此接口最大限度减少”连续访问”数据存储接口的工作</p>
 <ol>
 <li>ArrayList和Vector使用数组原理实现，区别在于，ArrayList线程不安全，Vector中绝大部分方法做了线程同步，所以线程安全；LinkedList使用循环双向链表数据结构，由一系列链表项(链表项由元素内容、前驱表项、后驱表项组成)连接而成</li>
 <li>ArrayList容量需求超过当前数组预定义的最大值，需要调用System.arraycopy()方法进行大量的数组复制操作；LinkList使用链表结构，不需要维护容量大小，每次新增元素都要创建一个新的Entry对象，并进行赋值操作。容易对性能产生影响</li>
@@ -238,11 +238,8 @@
 <li>LinkedHashMap继承HashMap，在HashMap基础上增加一个链表，以存放元素顺序，性能整体较快。基于元素进入集和顺序或被访问的先后顺序排序</li>
 <li>TreeMap实现了SortedMap接口，因此可以对元素进行排序，基于元素固有顺序</li>
 </ol>
-<h2 id="十四、字符切割"><a href="#十四、字符切割" class="headerlink" title="十四、字符切割"></a>十四、字符切割</h2><ol>
-<li><p>使用Split方式切割字符时性能较差，可以使用正则表达式或StringTokenizer处理字符串</p>
+<h2 id="十四、字符切割"><a href="#十四、字符切割" class="headerlink" title="十四、字符切割"></a>十四、字符切割</h2><p>​    1、使用Split方式切割字符时性能较差，可以使用正则表达式或StringTokenizer处理字符串</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">StringTokenizer st = <span class="keyword">new</span> StringTokenizer(str, <span class="string">","</span>);</span><br><span class="line">	<span class="keyword">while</span> (st.hasMoreElements()) &#123;</span><br><span class="line">		System.out.println(st.nextToken());</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
 <h2 id="十五、String、StringBuffer-和StringBuilder-区别"><a href="#十五、String、StringBuffer-和StringBuilder-区别" class="headerlink" title="十五、String、StringBuffer 和StringBuilder 区别"></a>十五、String、StringBuffer 和StringBuilder 区别</h2><ol>
 <li>String类使用”final”修饰的字符数组保存字符串（private final char value[];），所以String对象不可变（即每次对String对象的修改都会产生新的对象）。对字符串修改时（如：字符串拼接，替换），String对象都会产生新的对象，所以性能较差</li>
 <li>StringBuffer/StringBuilder 每次都是对自身进行操作，它们区别在于StringBuffer是线程安全（因为需要保证同步，效率比StringBuilder慢），StringBuilder线程不安全</li>
@@ -288,12 +285,8 @@
 <li>当程序有一定的等待时间，可以手动执行System.gc(),通知GC运行，但不保证GC一定会执行</li>
 </ol>
 <h2 id="二十一、异常"><a href="#二十一、异常" class="headerlink" title="二十一、异常"></a>二十一、异常</h2><p>​    异常处理以一种简洁方式表示程序中可能出现的错误，以及应对这些错误的处理方法。适当使用异常处理技术，可以提高代码可靠性、可维护性、可读性。</p>
-<ol>
-<li><p>受检异常（checked exception）：在编译时刻又编译器来检查，所以需要写比非受检异常更多的代码来避免编译错误。它强制要求开放者在代码中进行显示声明和捕获。</p>
-</li>
-<li><p>非受检异常/运行时异常（unchecked exception）：不补获异常，不会产生编译错误，在运行时刻才会抛出异常</p>
-</li>
-</ol>
+<p>1、受检异常（checked exception）：在编译时刻又编译器来检查，所以需要写比非受检异常更多的代码来避免编译错误。它强制要求开放者在代码中进行显示声明和捕获。</p>
+<p>2、非受检异常/运行时异常（unchecked exception）：不补获异常，不会产生编译错误，在运行时刻才会抛出异常</p>
 
       
 
