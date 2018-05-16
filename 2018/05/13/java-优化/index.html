@@ -17,7 +17,7 @@
 <meta property="og:description" content="java 优化建议">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/13/java-优化/直接.png">
-<meta property="og:updated_time" content="2018-05-16T15:54:18.994Z">
+<meta property="og:updated_time" content="2018-05-16T15:59:05.019Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java 优化">
 <meta name="twitter:description" content="java 优化建议">
@@ -167,13 +167,36 @@
         
 	<!-- 目录内容 -->
 
+    <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+          <span class="btn-bg"></span>
+          <span class="btn-text">文章导航</span>
+          </p>
+	<div id="toc-article" class="toc-article">
+	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+		<strong class="toc-title">文章目录</strong>
+           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、采用Clone-方式创建对象"><span class="toc-number">1.</span> <span class="toc-text">一、采用Clone() 方式创建对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、减少对boolean判断"><span class="toc-number">2.</span> <span class="toc-text">二、减少对boolean判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、多用条件操作符-“-“"><span class="toc-number">3.</span> <span class="toc-text">三、多用条件操作符(  “?  “)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、静态方法代替实例方法"><span class="toc-number">4.</span> <span class="toc-text">四、静态方法代替实例方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、多使用局部函数变量"><span class="toc-number">5.</span> <span class="toc-text">五、多使用局部函数变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#六、-用一维数组代替二维数组"><span class="toc-number">6.</span> <span class="toc-text">六、 用一维数组代替二维数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#七、对象的创建和访问过程"><span class="toc-number">7.</span> <span class="toc-text">七、对象的创建和访问过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#八、对象内存布局"><span class="toc-number">8.</span> <span class="toc-text">八、对象内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#九、对象访问定位"><span class="toc-number">9.</span> <span class="toc-text">九、对象访问定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十、集和内避免返回null"><span class="toc-number">10.</span> <span class="toc-text">十、集和内避免返回null</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十一、ArrayList、LinkedList和Vector比较"><span class="toc-number">11.</span> <span class="toc-text">十一、ArrayList、LinkedList和Vector比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十二、Vector和HashTable比较"><span class="toc-number">12.</span> <span class="toc-text">十二、Vector和HashTable比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十三、-LinkedHashMap-和TreeMap"><span class="toc-number">13.</span> <span class="toc-text">十三、 LinkedHashMap 和TreeMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十四、字符切割"><span class="toc-number">14.</span> <span class="toc-text">十四、字符切割</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十五、String、StringBuffer-和StringBuilder-区别"><span class="toc-number">15.</span> <span class="toc-text">十五、String、StringBuffer 和StringBuilder 区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十六、引用级别"><span class="toc-number">16.</span> <span class="toc-text">十六、引用级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十七、垃圾回收算法"><span class="toc-number">17.</span> <span class="toc-text">十七、垃圾回收算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十八、内存泄漏情况"><span class="toc-number">18.</span> <span class="toc-text">十八、内存泄漏情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十九、finalize"><span class="toc-number">19.</span> <span class="toc-text">十九、finalize</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二十-、让GC更加有效率"><span class="toc-number">20.</span> <span class="toc-text">二十 、让GC更加有效率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二十一、异常"><span class="toc-number">21.</span> <span class="toc-text">二十一、异常</span></a></li></ol>
+         </div>
+   <script type="text/javascript">
+	function showToc(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:block");
+		show_toc_btn.setAttribute("style","display:none");
+		};
+	function showBtn(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:none");
+		show_toc_btn.setAttribute("style","display:block");
+		};
+   </script>
+      
 <!-- 目录内容结束 -->
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>toc: ture</p>
-<h2 id="一、采用Clone-方式创建对象"><a href="#一、采用Clone-方式创建对象" class="headerlink" title="一、采用Clone() 方式创建对象"></a>一、采用Clone() 方式创建对象</h2><p>​    在java.lang.Object 中有一个clone()方法，它返回的是一个新的对象。和 ‘new’ 关键字返回的对象不同，这个新对象会包含一些原来对象的信息，不是对象的初始信息。一个对象实现Cloneable接口，通过调用clone()方法拷贝出一个新对象，这个过程不会调用任何的构造函数。</p>
+        <h2 id="一、采用Clone-方式创建对象"><a href="#一、采用Clone-方式创建对象" class="headerlink" title="一、采用Clone() 方式创建对象"></a>一、采用Clone() 方式创建对象</h2><p>​    在java.lang.Object 中有一个clone()方法，它返回的是一个新的对象。和 ‘new’ 关键字返回的对象不同，这个新对象会包含一些原来对象的信息，不是对象的初始信息。一个对象实现Cloneable接口，通过调用clone()方法拷贝出一个新对象，这个过程不会调用任何的构造函数。</p>
 <h2 id="二、减少对boolean判断"><a href="#二、减少对boolean判断" class="headerlink" title="二、减少对boolean判断"></a>二、减少对boolean判断</h2><ol>
 <li>代码执行更快</li>
 <li>代码变得简洁</li>
@@ -406,6 +429,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、采用Clone-方式创建对象"><span class="toc-number">1.</span> <span class="toc-text">一、采用Clone() 方式创建对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、减少对boolean判断"><span class="toc-number">2.</span> <span class="toc-text">二、减少对boolean判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、多用条件操作符-“-“"><span class="toc-number">3.</span> <span class="toc-text">三、多用条件操作符(  “?  “)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、静态方法代替实例方法"><span class="toc-number">4.</span> <span class="toc-text">四、静态方法代替实例方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、多使用局部函数变量"><span class="toc-number">5.</span> <span class="toc-text">五、多使用局部函数变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#六、-用一维数组代替二维数组"><span class="toc-number">6.</span> <span class="toc-text">六、 用一维数组代替二维数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#七、对象的创建和访问过程"><span class="toc-number">7.</span> <span class="toc-text">七、对象的创建和访问过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#八、对象内存布局"><span class="toc-number">8.</span> <span class="toc-text">八、对象内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#九、对象访问定位"><span class="toc-number">9.</span> <span class="toc-text">九、对象访问定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十、集和内避免返回null"><span class="toc-number">10.</span> <span class="toc-text">十、集和内避免返回null</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十一、ArrayList、LinkedList和Vector比较"><span class="toc-number">11.</span> <span class="toc-text">十一、ArrayList、LinkedList和Vector比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十二、Vector和HashTable比较"><span class="toc-number">12.</span> <span class="toc-text">十二、Vector和HashTable比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十三、-LinkedHashMap-和TreeMap"><span class="toc-number">13.</span> <span class="toc-text">十三、 LinkedHashMap 和TreeMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十四、字符切割"><span class="toc-number">14.</span> <span class="toc-text">十四、字符切割</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十五、String、StringBuffer-和StringBuilder-区别"><span class="toc-number">15.</span> <span class="toc-text">十五、String、StringBuffer 和StringBuilder 区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十六、引用级别"><span class="toc-number">16.</span> <span class="toc-text">十六、引用级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十七、垃圾回收算法"><span class="toc-number">17.</span> <span class="toc-text">十七、垃圾回收算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十八、内存泄漏情况"><span class="toc-number">18.</span> <span class="toc-text">十八、内存泄漏情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#十九、finalize"><span class="toc-number">19.</span> <span class="toc-text">十九、finalize</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二十-、让GC更加有效率"><span class="toc-number">20.</span> <span class="toc-text">二十 、让GC更加有效率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二十一、异常"><span class="toc-number">21.</span> <span class="toc-text">二十一、异常</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>
