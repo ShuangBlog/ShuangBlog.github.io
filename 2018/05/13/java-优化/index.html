@@ -17,7 +17,7 @@
 <meta property="og:description" content="java 优化建议">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/13/java-优化/直接.png">
-<meta property="og:updated_time" content="2018-05-16T12:10:42.312Z">
+<meta property="og:updated_time" content="2018-05-16T12:11:22.560Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java 优化">
 <meta name="twitter:description" content="java 优化建议">
@@ -187,10 +187,16 @@
 </ol>
 <p>注：如果不需要访问对象外部，可以将方法声明为静态方法。因为为了实现对多态的支持，实例方法需要维护一张类似虚拟函数导向表的结构，所以需要消耗更多的资源</p>
 <h2 id="五、多使用局部函数变量"><a href="#五、多使用局部函数变量" class="headerlink" title="五、多使用局部函数变量"></a>五、多使用局部函数变量</h2><p>1、局部变量 ：方法传递的参数和调用时创建的变量</p>
-<p>2、成员变量 ：</p>
+<p>2、成员变量 ：1</p>
 <ul>
+<li><ul>
 <li>静态变量（类变量）：①被static 关键字修饰  ② 被所有对象共享（某一个对象修改它，所有对象都是修改后结果） ③ 只要程序加载类的字节码，不用创建任何实例，静态变量就会被分配空间  ④ 可以直接类名来引用</li>
+</ul>
+</li>
+<li><ul>
 <li>实例变量：① 没有被static 关键字修饰  ② 属于对象私有（某一个对象将其改变，不会影响其他对象）③ 必须创建实例对象，实例变量才能被使用</li>
+</ul>
+</li>
 </ul>
 <p>方法传递的参数和调用时创建的变量（局部）都保存在栈中读写速度较快；其他变量（成员）(静态变量、实例变量)在堆中创建，并保留下来</p>
 <h2 id="六、-用一维数组代替二维数组"><a href="#六、-用一维数组代替二维数组" class="headerlink" title="六、 用一维数组代替二维数组"></a>六、 用一维数组代替二维数组</h2><p>​    二维数组的访问速度优于一维数组，但，二维数组占用更多的内存空间（约为一维数组的10倍）</p>
