@@ -17,7 +17,7 @@
 <meta property="og:description" content="java 优化建议">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/13/java-优化/直接.png">
-<meta property="og:updated_time" content="2018-05-16T14:05:44.970Z">
+<meta property="og:updated_time" content="2018-05-16T15:19:55.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java 优化">
 <meta name="twitter:description" content="java 优化建议">
@@ -261,7 +261,8 @@
 <p style="text-indent:2em; ">b.垃圾回收器在会保证在抛出OOM之前，回收所有的软引用可达对象</p>
 
 <p>3、弱引用（WeakReference）:通过弱引用声明，在系统GC时，弱引用一旦被发现，不够堆空间是否足够，都会将对象回收</p>
-<p>4、虚引用（PhantomReference）:通过虚引用声明，是强度最弱的一种引用，主要目的是在一个对象被实际回收之前得到通知</p>
+<p>4、虚引用（PhantomReference）:通过虚引用声明，是强度最弱的一种引用，主要目的是在一个对象被实际回收之前得到通知，从而进行一些相关的清理工作，必须和引用队列(ReferenceQueue)一起使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//软引用</span></span><br><span class="line">	<span class="comment">// 方式一</span></span><br><span class="line">		 Banner banner =<span class="keyword">new</span> Banner();</span><br><span class="line">		SoftReference sf = <span class="keyword">new</span> SoftReference(obj);</span><br><span class="line">	<span class="comment">//方式二</span></span><br><span class="line"> 	   ReferenceQueue queue = <span class="keyword">new</span>  ReferenceQueue();</span><br><span class="line"> 	   <span class="function">SoftReference sfT new <span class="title">SoftReference</span><span class="params">(obj,queue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//弱引用</span></span><br><span class="line">	<span class="comment">//方式一</span></span><br><span class="line">        Banner banner =<span class="keyword">new</span> Banner();</span><br><span class="line">        WeakReference&lt;Banner&gt; wf = <span class="keyword">new</span> WeakReference&lt;Banner&gt;(banner);</span><br><span class="line">	<span class="comment">//方式二</span></span><br><span class="line">		ReferenceQueue&lt;Banner&gt; queue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line">       	 WeakReference&lt;Banner&gt; wfT = <span class="keyword">new</span> WeakReference&lt;Banner&gt;(banner,queue);</span><br><span class="line"></span><br><span class="line"><span class="comment">//虚引用</span></span><br><span class="line">		Banner banner =<span class="keyword">new</span> Banner();</span><br><span class="line">		ReferenceQueue&lt;Banner&gt; queue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line">		PhantomReference&lt;Banner&gt; pf = <span class="keyword">new</span> PhantomReference&lt;&gt;(banner,queue);</span><br></pre></td></tr></table></figure>
 <h2 id="十七、垃圾回收算法"><a href="#十七、垃圾回收算法" class="headerlink" title="十七、垃圾回收算法"></a>十七、垃圾回收算法</h2><ol>
 <li>引用次数器 ：当有新的引用指向某个对象时把计数器的值加1，当某个引用失效时，计数器减1；当对象的引用次数为零时，该对象可以被垃圾回收器回收。但是，引用计数器不能解决孤岛的回收问题。（引用孤岛：A对象引用B对象，B对象引用C对象，C对象引用A对象。这样这三个对象就成为了内存中的一个孤岛，因为它们的引用次数不为零，所以不能通过引用计数器方式来回收）</li>
 <li>跟踪对象引用 : 从VM内存中某些存活对象开始，递归检查这些对象所引用的其他对象，直到找不到引用其他才停止，在递归检查过程中发现的对象标记为存活，其他则是可以被回收的。这个递归过程可以看做是基于引用关系树的遍历</li>
@@ -280,7 +281,19 @@
 
 <p style="text-indent:2em; ">c.不可达状态：垃圾回收器可以自由是否对象占有的内存空间</p>
 
-
+<h2 id="二十-、让GC更加有效率"><a href="#二十-、让GC更加有效率" class="headerlink" title="二十 、让GC更加有效率"></a>二十 、让GC更加有效率</h2><ol>
+<li>尽早释放无用的对象引用，即在程序允许下，将引用对象赋值为null</li>
+<li>尽量少使用finalize()函数，虽然我们可以覆写此方法获取一个释放对象或资源的机会，但，它会加大GC的工作量</li>
+<li>如果需要经常使用图片，可以使用SoftReference类型，它可以尽可能将图片保存在内存中而不引起OOM</li>
+<li>当程序有一定的等待时间，可以手动执行System.gc(),通知GC运行，但不保证GC一定会执行</li>
+</ol>
+<h2 id="二十一、异常"><a href="#二十一、异常" class="headerlink" title="二十一、异常"></a>二十一、异常</h2><p>​    异常处理以一种简洁方式表示程序中可能出现的错误，以及应对这些错误的处理方法。适当使用异常处理技术，可以提高代码可靠性、可维护性、可读性。</p>
+<ol>
+<li><p>受检异常（checked exception）：在编译时刻又编译器来检查，所以需要写比非受检异常更多的代码来避免编译错误。它强制要求开放者在代码中进行显示声明和捕获。</p>
+</li>
+<li><p>非受检异常/运行时异常（unchecked exception）：不补获异常，不会产生编译错误，在运行时刻才会抛出异常</p>
+</li>
+</ol>
 
       
 
