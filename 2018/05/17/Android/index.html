@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-20T08:23:11.731Z">
+<meta property="og:updated_time" content="2018-05-20T15:34:25.435Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
@@ -323,7 +323,97 @@
 <ul>
 <li>当通过隐式方式启动Activity时，可以用PackageManager的resolveActivity方法或Inten的resolveActivity方法，来判断是否找到匹配的Activity；也可以使用PackageManager的queryIntentActivities方法，来获得所有匹配成功的Activity信息</li>
 </ul>
-<h2 id="IPC机制"><a href="#IPC机制" class="headerlink" title="IPC机制"></a><center>IPC机制</center></h2><p>10、</p>
+<h2 id="IPC机制"><a href="#IPC机制" class="headerlink" title="IPC机制"></a><center>IPC机制</center></h2><p>1、IPC（Inter-Process-Communication）：进程间通讯或跨进程通讯，指连个进程间的数据交换的过程。Android为每个进程分配一个独立的虚拟机，不同虚拟机在内存中的地址不同，导致在不同虚拟机中访问同一个类的对象会产生多份副本，所以需要IPC。</p>
+<ul>
+<li>进程：一般指一个执行单元，在移动设备上指一个应用程序，一个进程可以包含多个线程</li>
+<li>线程：cpu调度的最小单元，也是一种有限的系统资源，在一个应用中可以只有一个线程（主线程），当有耗时任务时，为了防止应用程序出现界面无法响应的情况，需要创建子线程去执行耗时任务。</li>
+<li>使用场景：只有在多进程的环境下，才需要考虑进程间通信</li>
+</ul>
+<p>2、Android多进程模式：</p>
+<ul>
+<li><p>在Android中多进程是指一个应用存在多个进程的情况，通过在AndroidMenifest给四大组件组件指定android:process属性来实现多进程，或通过JNI在native层去fork一个新的进程，但这种方式不常用。</p>
+</li>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;activity android:name=<span class="string">".ProcessActivity"</span></span><br><span class="line">         android:process=<span class="string">":remove"</span>&gt;</span><br><span class="line">&lt;/activity&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用多进程会引起几个问题</p>
+<ul>
+<li>静态成员或单例模式失效：不是同一块内存</li>
+<li>线程同步机制失效：因为不是同一块内存，所以不管是对象锁还是类锁都无法保证线程同步</li>
+<li>SharePreferences可靠性降低：SharePerferences不支持多个进程同时进行写操作，否则，有一定几率导致数据丢失</li>
+<li>Apolication会多次创建</li>
+</ul>
+</li>
+</ul>
+<p>3、序列化</p>
+<ul>
+<li><p>序列化是指把java对象转化为字节序列并存储到一个存储媒介的过程。</p>
+</li>
+<li><p>Android不同进程有自己独立的内存空间，且相互不能进行访问。因此，必须将要传输的数据转化成能够在内存流通的形式</p>
+</li>
+<li><p>android序列化方式：</p>
+<ul>
+<li><p>Serializable接口：</p>
+<ul>
+<li>是java提供的序列化接口，为对象提供标准的序列化和反序列化操作</li>
+<li>只需要类实现Serializable接口，并声明一个serialVersionUID即可，不声明serialVersionUID对序列化没影响，但会影响反序列化过程，在反序列化时，回去检测serialVersionUID，看它是否和当前类的serialVersionUID一致，一致则反序列化成功，如不一致，则说明成员变量的数量、类型发生了改变，序列化就会失败。</li>
+</ul>
+</li>
+<li><p>Parceable接口</p>
+<ul>
+<li><p>Android提供的序列化接口，只要实现这个接口就可以实现对象序列化</p>
+</li>
+<li><p>序列化由writeToParcel方法完成，最终通过Parcel中的一系列write方法完成的</p>
+</li>
+<li><p>反序列化由CREATOR完成，内部标明如何创建序列化对象和数组，最终通过Parcel的一系列read方法完成反序列化</p>
+</li>
+<li><p>内容描述功能有describeContents方法完成，几乎所有情况此方法都返回0，仅当当前对象存文件描述符是，此方法才返回1</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Persion</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Persion</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">Persion</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">        name = in.readString();</span><br><span class="line">        age = in.readInt();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//序列化</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel out, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">        out.writeString(name);</span><br><span class="line">        out.writeInt(age);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//反序列化</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;Persion&gt; CREATOR = <span class="keyword">new</span> Creator&lt;Persion&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Persion <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Persion(in);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Persion[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Persion[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>两者区别：</p>
+<ul>
+<li>Serializable： ① Serializable是java的序列化接口 ② 使用简单，但开销很大 ③会在序列化时创建许多临时对象，容易引起GC </li>
+<li>Parcelable ：① Android序列化方式 ② 使用麻烦，但效率高 ③ 主要用于内存序列化上，将对象序列化到存储设备中或将对象序列化后通过网络传输也可以，但，过程会比较麻烦，所以，这两种情况建议使用Serializable</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>4、 Binder</p>
+<ul>
+<li><p>Binder是Android中的实现IBinder接口的一个类，是一种跨进程通讯方式，从Framework角度看，它是ServiceManager连接各种Manager（ActivityManager、WindowManager等）和相应ManagerService的桥梁；它同样是客户端和服务端进行通信的媒介，通过bindService方法返回一个包含服务端业务调用的Binder对象，通过这个Binder客户端可以获取服务端提供的服务或数据。</p>
+</li>
+<li><p>Android中，Binder主要用在Service中，包括ADIL和Messenger，但普通的Service中的Binder不涉及进程通讯，Messenger底层也是AIDL</p>
+</li>
+<li><p>所有可以在Binder传输的接口都需要继承IInteface接口</p>
+</li>
+<li><p>AIDL：</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPersionManager</span> <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">os</span>.<span class="title">IInterface</span> </span>&#123;</span><br><span class="line"> 	 <span class="keyword">public</span> java.util.List&lt;com.example.aidl.Persion&gt; getPersionList() <span class="keyword">throws</span> android.os.RemoteException;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPersion</span><span class="params">(com.example.aidl.Persion persion)</span> <span class="keyword">throws</span> android.os.RemoteException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//内部类stub</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Stub</span> <span class="keyword">extends</span> <span class="title">Binder</span> <span class="title">implementscom</span> <span class="title">com</span>.<span class="title">example</span>.<span class="title">aidl</span>.<span class="title">IPersionManager</span></span>&#123;</span><br><span class="line">      	<span class="comment">//静态变量</span></span><br><span class="line">      	<span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TRANSACTION_getPersionList=( IBinder.FIRST_CALL_TRANSACTION + <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TRANSACTION_addPersion = (IBinder.FIRST_CALL_TRANSACTION + <span class="number">1</span>);</span><br><span class="line">         </span><br><span class="line">    	 <span class="comment">//stub方法</span></span><br><span class="line">         <span class="keyword">public</span> android.os.<span class="function">IBinder <span class="title">asBinder</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTransact</span><span class="params">(<span class="keyword">int</span> code,Parcel data, Parcel reply, <span class="keyword">int</span> flags)</span> <span class="keyword">throws</span> 	RemoteException</span>&#123;&#125;</span><br><span class="line">         </span><br><span class="line">  	   	<span class="comment">//内部类Proxy</span></span><br><span class="line">         <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">example</span>.<span class="title">aidl</span>.<span class="title">IPersionManager</span></span>&#123;</span><br><span class="line">           		<span class="comment">//成员变量</span></span><br><span class="line">             	<span class="keyword">private</span> IBinder mRemote;</span><br><span class="line">             </span><br><span class="line">             	<span class="comment">//Proxy 方法</span></span><br><span class="line">             	Proxy(IBinder remote) &#123;&#125;</span><br><span class="line">             	<span class="function"><span class="keyword">public</span> IBinder <span class="title">asBinder</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">            	<span class="keyword">public</span> java.lang.<span class="function">String <span class="title">getInterfaceDescriptor</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">             	<span class="keyword">public</span> java.util.List&lt;com.example.aidl.Persion&gt; getPersionList() <span class="keyword">throws</span> 			RemoteException&#123;&#125;</span><br><span class="line">             	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPersion</span><span class="params">(com.example.aidl.Persion persion)</span> <span class="keyword">throws</span> 					RemoteException</span>&#123;&#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Stub类：是一个Binder类，</p>
+</li>
+<li><p>asInterface()：用于将服务器端的Binder对象转化为客户端所需的AIDL接口类型的对象，如果客户端和服务端位于同一进程，此方法返回服务端的Stub对象本身，否则，返回系统封装后的Stub.Proxy对象</p>
+</li>
+<li><p>onTransact() ：此方法运行在服务端的Binder线程池，远处请求会通过系统底层封装后交给此方法处理。如果返回false，则客户端请求会失败</p>
+</li>
+<li><p>asBinder() ：返回当前Binder对象</p>
+</li>
+</ul>
+</li>
+<li><p>Proxy/代理 类：是Stub的内部类，里面实现服务器端暴露个客户端的方法或数据</p>
+</li>
+<li><p>说明：</p>
+<ul>
+<li>当客户端发起远程请求是，当前线程会被挂起直到服务端进程返回数据，假设一个远程方法是耗时的，则不能再UI线程发起此远程请求</li>
+<li>服务端的Binder方法运行在Binder线程池中，所以Binder方法都应该采取同步方式实现</li>
+</ul>
+</li>
+</ul>
+<p>10、</p>
 
       
 
