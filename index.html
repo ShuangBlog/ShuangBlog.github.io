@@ -144,6 +144,134 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Android" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/17/Android/">Android</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/17/Android/" class="archive-article-date">
+  	<time datetime="2018-05-17T12:52:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-17</time>
+</a>
+        
+	<!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Activity相关"><a href="#Activity相关" class="headerlink" title="Activity相关"></a>Activity相关</h2><p>1、Activity：</p>
+<p>​        Activity是Android四大组件之一，使用最为频繁的一个组件。可以与用户进行交互。</p>
+<p>2、Activity生命周期</p>
+<ul>
+<li><p>正常生命周期：</p>
+<p>onCreate() : 生命周期第一个方法，我们可以在这个方法里做一些初始化工作，如setContentView，findViewById(int) 等</p>
+<p>onRestart() :  Activity重新启动的时候调用</p>
+<p>onStart() : Activity正在被启动，此时Activity已经可见，但是还无法和用户交互</p>
+<p>onResume() : Activity已经在前台，也可以和用户交互，在方法里我们可以重新初始化onPause或onStop方法释放的资源</p>
+<p>onPause() : 表示Activity正在停止，在此方法中，可以做一些数据存储和动画停止等操作，但不能太耗时，否则会影响新的Activity的显示（onPause方法执行完之后，新的Activity的onResume方法才会执行）</p>
+<p>onStop() : 一般onPause方法执行完之后，此方法就会被执行，表示即将停止，此时可以做一些稍微重量级的回收，但也不能太耗时</p>
+<p>onDestroy() : Activity正在被销毁，此时，可以做回收工作或最终资源释放</p>
+</li>
+</ul>
+<p>注：onStart()和onStop()是从是否可见的角度来回调，onResume() 和onPause() 是从是否位于前台来回调的</p>
+<ul>
+<li><p>异常生命周期：</p>
+<p>情况一：资源相关配置发生改变导致Activity被杀死重新创建（如：屏幕旋转）</p>
+<p>​    在系统配置发生改变后，Activity会被销毁，在onPause、onStop、onDestroy方法调用之外系统还会在onStop之前调用onSaveInstanceState方法来保存当前Activity的状态，当Activity被重新创建后系统会调用onRestoreInstanceState方法，并onSaveInstanceState方法保存的Bundle对象传递给onRestoreInstaceSate和onCreate方法。可以通过OnRestoreInstanceState和onCreate方法来判断Activity是否被重新创建，如果是我们就可以取出之前保存的数据。OnRestoreInstanceState和onCreate方法区别是我们在前者里面不判断Bundle是否为空。OnRestoreInstanceState在onStart之后调用</p>
+<p>情况二：    内存资源不足导致优先级低的Activity被杀死</p>
+<p>​    系统在内存不足时，会杀死优先级的Activity所在的进程，并通过onSaveInstanceState和OnRestoreInstanceState来存储和恢复数据</p>
+</li>
+</ul>
+<p>  3、进程优先级</p>
+<ul>
+<li>前台进程：Activity正在与用户交互</li>
+<li>可见进程：Activity可见但不是前台，如弹出一个选择框，有Service绑定到可见或前台的Activity</li>
+<li>服务进程：进程中有Service正在运行</li>
+<li>后台进程：Activity已经暂停，即已经调用onStop方法</li>
+<li><p>空进程：不含有任何app组件，存活目的仅仅是为了提高下次app启动速度</p>
+<p>4、Activity启动模式</p>
+</li>
+<li><p>standard（默认） ：标准启动模式，每次启动Activity都会重新创建一个实例，即使Activity已经存在。在此模式下，谁启动此Activity，那么次Activity就运行在启动它的那个Activity所在的栈中，如果这个栈不存在就会报错，如用ApplicationContext去启动standard模式的Activity时会报错，因为非Activity类型的Context没有任务栈        </p>
+<ul>
+<li>singleTop ： 栈顶复用模式，此模式可以有多个Activity实例，但不允许此Activity的多个实例叠加，如果此Activity有实例在栈顶，那么在启动时不会创建新的实例，而是调用它的onNewIntent()方法。要注意的是这个Activity的onCreate()、onStart()不会被系统调用</li>
+<li>singleTask ： 栈内复用模式，这是一种单实例模式，在此模式下，只要Activity在一个栈中存在，则多次启动此Activity都不会创建新的实例，而是调用onNewIntent方法，onCreate和onStart同样不会被调用。即，当Activity以SingleTask模式启动后，系统会寻找是否存在此Activity想要的任务栈，如不存在，就重新创建一个任务栈，然后把此Activity实例放进栈内，如存在所需任务栈，则查看Activity在此任务栈是否存在实例，如实例不存在就创建此Activity实例并放入栈中，如实例存在，则clearTop将实例以上的Activity出栈，并调用此Activity的onNewIntent方法</li>
+<li>singleInstance ：单实例模式，是一种加强的singleTask。此模式下的Activity只能单独位于一个任务栈中。当此模式下的Activity启动后，系统会为它创建一个新的栈，此Activity独立在这个新的栈中，由于栈内复用特性，以后的请求都不会创建新的Activity，除非这个任务栈销毁。</li>
+</ul>
+<p>​        </p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/17/Android/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-java-优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -418,6 +546,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">黑</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Android</a>
               </li>
              
               <li class="article-tag-list-item">
