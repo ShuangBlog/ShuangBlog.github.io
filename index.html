@@ -204,21 +204,21 @@
 <li>标准启动模式，每次启动Activity都会重新创建一个实例，即使Activity已经存在。在此模式下，谁启动此Activity，那么次Activity就运行在启动它的那个Activity所在的栈中，如果这个栈不存在就会报错，如用ApplicationContext去启动standard模式的Activity时会报错，因为非Activity类型的Context没有任务栈    </li>
 </ul>
 </li>
-<li><p>singleTop </p>
+<li><p>singleTop （栈顶复用模式）：</p>
 <ul>
-<li>栈顶复用模式，此模式可以有多个Activity实例，但不允许此Activity的多个实例叠加，如果此Activity有实例在栈顶，那么在启动时不会创建新的实例，而是调用它的onNewIntent()方法。要注意的是这个Activity的onCreate()、onStart()不会被系统调用</li>
+<li>此模式可以有多个Activity实例，但不允许此Activity的多个实例叠加，如果此Activity有实例在栈顶，那么在启动时不会创建新的实例，而是调用它的onNewIntent()方法。要注意的是这个Activity的onCreate()、onStart()不会被系统调用</li>
 <li>使用场景</li>
 </ul>
 </li>
-<li><p>singleTask </p>
+<li><p>singleTask （栈内复用模式）</p>
 <ul>
-<li>栈内复用模式，这是一种单实例模式，在此模式下，只要Activity在一个栈中存在，则多次启动此Activity都不会创建新的实例，而是调用onNewIntent方法，onCreate和onStart同样不会被调用。即，当Activity以SingleTask模式启动后，系统会寻找是否存在此Activity想要的任务栈，如不存在，就重新创建一个任务栈，然后把此Activity实例放进栈内，如存在所需任务栈，则查看Activity在此任务栈是否存在实例，如实例不存在就创建此Activity实例并放入栈中，如实例存在，则clearTop将实例以上的Activity出栈，并调用此Activity的onNewIntent方法</li>
+<li>这是一种单实例模式，在此模式下，只要Activity在一个栈中存在，则多次启动此Activity都不会创建新的实例，而是调用onNewIntent方法，onCreate和onStart同样不会被调用。即，当Activity以SingleTask模式启动后，系统会寻找是否存在此Activity想要的任务栈，如不存在，就重新创建一个任务栈，然后把此Activity实例放进栈内，如存在所需任务栈，则查看Activity在此任务栈是否存在实例，如实例不存在就创建此Activity实例并放入栈中，如实例存在，则clearTop将实例以上的Activity出栈，并调用此Activity的onNewIntent方法</li>
 <li>使用场景</li>
 </ul>
 </li>
-<li><p>singleInstance </p>
+<li><p>singleInstance （单实例模式，是一种加强的singleTask）</p>
 <ul>
-<li><p>单实例模式，是一种加强的singleTask。此模式下的Activity只能单独位于一个任务栈中。当此模式下的Activity启动后，系统会为它创建一个新的栈，此Activity独立在这个新的栈中，由于栈内复用特性，以后的请求都不会创建新的Activity，除非这个任务栈销毁。</p>
+<li><p>此模式下的Activity只能单独位于一个任务栈中。当此模式下的Activity启动后，系统会为它创建一个新的栈，此Activity独立在这个新的栈中，由于栈内复用特性，以后的请求都不会创建新的Activity，除非这个任务栈销毁。</p>
 </li>
 <li><p>使用场景</p>
 </li>
