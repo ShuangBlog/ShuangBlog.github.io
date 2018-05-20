@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-20T08:20:14.090Z">
+<meta property="og:updated_time" content="2018-05-20T08:23:11.731Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
@@ -201,7 +201,7 @@
 <li><p>正常生命周期：</p>
 <ul>
 <li>onCreate() : 生命周期第一个方法，我们可以在这个方法里做一些初始化工作，如setContentView，findViewById(int) 等</li>
-<li>onRestart() :  Activity重新启动的时候调用</li>
+<li>onRestart() :  Activity重新启动的时候调用<a id="more"></a></li>
 <li>onStart() : Activity正在被启动，此时Activity已经可见，但是还无法和用户交互</li>
 <li>onResume() : Activity已经在前台，也可以和用户交互，在方法里我们可以重新初始化onPause或onStop方法释放的资源</li>
 <li>onPause() : 表示Activity正在停止，在此方法中，可以做一些数据存储和动画停止等操作，但不能太耗时，否则会影响新的Activity的显示（onPause方法执行完之后，新的Activity的onResume方法才会执行）</li>
@@ -214,7 +214,7 @@
 <ul>
 <li><p>异常生命周期：</p>
 <p>情况一：资源相关配置发生改变导致Activity被杀死重新创建（如：屏幕旋转）</p>
-<p>​    在系统配置发生改变后，Activity会被销毁，在onPause、onStop、onDestroy方法调用之外系统还会在onStop之前调用onSaveInstanceState方法来保存当前Activity的状态，当Activity被重新创建后系统会调用onRestoreInstanceState方法，并onSaveInstanceState方法保存的Bundle对象传递给onRestoreInstaceSate和onCreate方法。可以通过OnRestoreInstanceState和onCreate方法来判断Activity是否被重新创建，如果是我们就可以取出之前保存的数据。OnRestoreInstanceState和onCreate方法区别是我们在前者里面不判断Bundle是否为空。OnRestoreInstanceState在onStart之后调用<a id="more"></a></p>
+<p>​    在系统配置发生改变后，Activity会被销毁，在onPause、onStop、onDestroy方法调用之外系统还会在onStop之前调用onSaveInstanceState方法来保存当前Activity的状态，当Activity被重新创建后系统会调用onRestoreInstanceState方法，并onSaveInstanceState方法保存的Bundle对象传递给onRestoreInstaceSate和onCreate方法。可以通过OnRestoreInstanceState和onCreate方法来判断Activity是否被重新创建，如果是我们就可以取出之前保存的数据。OnRestoreInstanceState和onCreate方法区别是我们在前者里面不判断Bundle是否为空。OnRestoreInstanceState在onStart之后调用</p>
 <p>情况二：    内存资源不足导致优先级低的Activity被杀死</p>
 <p>​    系统在内存不足时，会杀死优先级的Activity所在的进程，并通过onSaveInstanceState和OnRestoreInstanceState来存储和恢复数据    </p>
 <p>3、进程优先级</p>

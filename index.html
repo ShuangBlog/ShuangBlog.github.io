@@ -174,20 +174,7 @@
 <li><p>正常生命周期：</p>
 <ul>
 <li>onCreate() : 生命周期第一个方法，我们可以在这个方法里做一些初始化工作，如setContentView，findViewById(int) 等</li>
-<li>onRestart() :  Activity重新启动的时候调用</li>
-<li>onStart() : Activity正在被启动，此时Activity已经可见，但是还无法和用户交互</li>
-<li>onResume() : Activity已经在前台，也可以和用户交互，在方法里我们可以重新初始化onPause或onStop方法释放的资源</li>
-<li>onPause() : 表示Activity正在停止，在此方法中，可以做一些数据存储和动画停止等操作，但不能太耗时，否则会影响新的Activity的显示（onPause方法执行完之后，新的Activity的onResume方法才会执行）</li>
-<li>onStop() : 一般onPause方法执行完之后，此方法就会被执行，表示即将停止，此时可以做一些稍微重量级的回收，但也不能太耗时</li>
-<li>onDestroy() : Activity正在被销毁，此时，可以做回收工作或最终资源释放</li>
-</ul>
-</li>
-</ul>
-<p>注：onStart()和onStop()是从是否可见的角度来回调，onResume() 和onPause() 是从是否位于前台来回调的</p>
-<ul>
-<li><p>异常生命周期：</p>
-<p>情况一：资源相关配置发生改变导致Activity被杀死重新创建（如：屏幕旋转）</p>
-<p>​    在系统配置发生改变后，Activity会被销毁，在onPause、onStop、onDestroy方法调用之外系统还会在onStop之前调用onSaveInstanceState方法来保存当前Activity的状态，当Activity被重新创建后系统会调用onRestoreInstanceState方法，并onSaveInstanceState方法保存的Bundle对象传递给onRestoreInstaceSate和onCreate方法。可以通过OnRestoreInstanceState和onCreate方法来判断Activity是否被重新创建，如果是我们就可以取出之前保存的数据。OnRestoreInstanceState和onCreate方法区别是我们在前者里面不判断Bundle是否为空。OnRestoreInstanceState在onStart之后调用</p></li></ul>
+<li>onRestart() :  Activity重新启动的时候调用</li></ul></li></ul>
         
           <a class="article-more-a" href="/2018/05/17/Android/#more">more >></a>
         
