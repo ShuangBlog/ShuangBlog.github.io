@@ -199,7 +199,7 @@
 <li><p>空进程：不含有任何app组件，存活目的仅仅是为了提高下次app启动速度</p>
 <p>4、Activity启动模式</p>
 </li>
-<li><p>standard（默认） </p>
+<li><p>standard（默认） ：</p>
 <ul>
 <li>标准启动模式，每次启动Activity都会重新创建一个实例，即使Activity已经存在。在此模式下，谁启动此Activity，那么次Activity就运行在启动它的那个Activity所在的栈中，如果这个栈不存在就会报错，如用ApplicationContext去启动standard模式的Activity时会报错，因为非Activity类型的Context没有任务栈    </li>
 </ul>
@@ -210,13 +210,13 @@
 <li>使用场景</li>
 </ul>
 </li>
-<li><p>singleTask （栈内复用模式）</p>
+<li><p>singleTask （栈内复用模式）:</p>
 <ul>
 <li>这是一种单实例模式，在此模式下，只要Activity在一个栈中存在，则多次启动此Activity都不会创建新的实例，而是调用onNewIntent方法，onCreate和onStart同样不会被调用。即，当Activity以SingleTask模式启动后，系统会寻找是否存在此Activity想要的任务栈，如不存在，就重新创建一个任务栈，然后把此Activity实例放进栈内，如存在所需任务栈，则查看Activity在此任务栈是否存在实例，如实例不存在就创建此Activity实例并放入栈中，如实例存在，则clearTop将实例以上的Activity出栈，并调用此Activity的onNewIntent方法</li>
 <li>使用场景</li>
 </ul>
 </li>
-<li><p>singleInstance （单实例模式，是一种加强的singleTask）</p>
+<li><p>singleInstance （单实例模式，是一种加强的singleTask）:</p>
 <ul>
 <li><p>此模式下的Activity只能单独位于一个任务栈中。当此模式下的Activity启动后，系统会为它创建一个新的栈，此Activity独立在这个新的栈中，由于栈内复用特性，以后的请求都不会创建新的Activity，除非这个任务栈销毁。</p>
 </li>
