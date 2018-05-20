@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-20T01:49:19.204Z">
+<meta property="og:updated_time" content="2018-05-20T04:26:12.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
@@ -199,13 +199,15 @@
 <p>2、Activity生命周期</p>
 <ul>
 <li><p>正常生命周期：</p>
-<p>onCreate() : 生命周期第一个方法，我们可以在这个方法里做一些初始化工作，如setContentView，findViewById(int) 等</p>
-<p>onRestart() :  Activity重新启动的时候调用</p>
-<p>onStart() : Activity正在被启动，此时Activity已经可见，但是还无法和用户交互</p>
-<p>onResume() : Activity已经在前台，也可以和用户交互，在方法里我们可以重新初始化onPause或onStop方法释放的资源</p>
-<p>onPause() : 表示Activity正在停止，在此方法中，可以做一些数据存储和动画停止等操作，但不能太耗时，否则会影响新的Activity的显示（onPause方法执行完之后，新的Activity的onResume方法才会执行）</p>
-<p>onStop() : 一般onPause方法执行完之后，此方法就会被执行，表示即将停止，此时可以做一些稍微重量级的回收，但也不能太耗时</p>
-<p>onDestroy() : Activity正在被销毁，此时，可以做回收工作或最终资源释放</p>
+<ul>
+<li>onCreate() : 生命周期第一个方法，我们可以在这个方法里做一些初始化工作，如setContentView，findViewById(int) 等</li>
+<li>onRestart() :  Activity重新启动的时候调用</li>
+<li>onStart() : Activity正在被启动，此时Activity已经可见，但是还无法和用户交互</li>
+<li>onResume() : Activity已经在前台，也可以和用户交互，在方法里我们可以重新初始化onPause或onStop方法释放的资源</li>
+<li>onPause() : 表示Activity正在停止，在此方法中，可以做一些数据存储和动画停止等操作，但不能太耗时，否则会影响新的Activity的显示（onPause方法执行完之后，新的Activity的onResume方法才会执行）</li>
+<li>onStop() : 一般onPause方法执行完之后，此方法就会被执行，表示即将停止，此时可以做一些稍微重量级的回收，但也不能太耗时</li>
+<li>onDestroy() : Activity正在被销毁，此时，可以做回收工作或最终资源释放</li>
+</ul>
 </li>
 </ul>
 <p>注：onStart()和onStop()是从是否可见的角度来回调，onResume() 和onPause() 是从是否位于前台来回调的</p>
@@ -231,28 +233,36 @@
 <li>标准启动模式，每次启动Activity都会重新创建一个实例，即使Activity已经存在。在此模式下，谁启动此Activity，那么次Activity就运行在启动它的那个Activity所在的栈中，如果这个栈不存在就会报错，如用ApplicationContext去启动standard模式的Activity时会报错，因为非Activity类型的Context没有任务栈    </li>
 </ul>
 </li>
-<li><p>singleTop （栈顶复用模式）：</p>
-<ul>
+<li>singleTop （栈顶复用模式）：<ul>
 <li>此模式可以有多个Activity实例，但不允许此Activity的多个实例叠加，如果此Activity有实例在栈顶，那么在启动时不会创建新的实例，而是调用它的onNewIntent()方法。要注意的是这个Activity的onCreate()、onStart()不会被系统调用</li>
-<li>使用场景</li>
+<li>使用场景 : 适用于接收消息后显示的界面，如，接收消息弹出Activity，假设来10条消息，只需创建一个Activity实例，而不需创建10个</li>
 </ul>
 </li>
-<li><p>singleTask （栈内复用模式）:</p>
-<ul>
+<li>singleTask （栈内复用模式）:<ul>
 <li>这是一种单实例模式，在此模式下，只要Activity在一个栈中存在，则多次启动此Activity都不会创建新的实例，而是调用onNewIntent方法，onCreate和onStart同样不会被调用。即，当Activity以SingleTask模式启动后，系统会寻找是否存在此Activity想要的任务栈，如不存在，就重新创建一个任务栈，然后把此Activity实例放进栈内，如存在所需任务栈，则查看Activity在此任务栈是否存在实例，如实例不存在就创建此Activity实例并放入栈中，如实例存在，则clearTop将实例以上的Activity出栈，并调用此Activity的onNewIntent方法</li>
-<li>使用场景</li>
+<li>使用场景 ： 适用于作为程序入口点，如浏览器的主界面，不管多少个应用打开浏览器，只会启动主界面一次，并把在主界面Activity之上的Activity出栈，而不需要用户按回退。</li>
 </ul>
 </li>
 <li><p>singleInstance （单实例模式，是一种加强的singleTask）:</p>
 <ul>
-<li><p>此模式下的Activity只能单独位于一个任务栈中。当此模式下的Activity启动后，系统会为它创建一个新的栈，此Activity独立在这个新的栈中，由于栈内复用特性，以后的请求都不会创建新的Activity，除非这个任务栈销毁。</p>
+<li>此模式下的Activity只能单独位于一个任务栈中。当此模式下的Activity启动后，系统会为它创建一个新的栈，此Activity独立在这个新的栈中，由于栈内复用特性，以后的请求都不会创建新的Activity，除非这个任务栈销毁。</li>
+<li>使用场景 ： 适用于需要与程序分离开的界面，如，闹钟提醒，将闹钟提醒和闹钟设置分开</li>
+</ul>
+<p>5、设置Activity的启动模式</p>
+<ul>
+<li><p>通过AndroidMenifest给Activity设置启动模式</p>
 </li>
-<li><p>使用场景</p>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//方式一</span></span><br><span class="line">&lt;activity android:name=<span class="string">".ModeActivity"</span></span><br><span class="line">           android:launchMode=<span class="string">"singleTop"</span>/&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过Intent中设置标志位来指定Activity的启动模式</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式二</span></span><br><span class="line">   Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">      intent.setClass(MainActivity.<span class="keyword">this</span>,ModeActivity.class);</span><br><span class="line">      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);</span><br><span class="line">      startActivity(intent);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>两者都可以为Activity指定启动模式，但，方式二的优先级大于方式一，也就是说两者同时存在时，以方式二为准；而且，方式一无法直接为Activity设定FLAG_ACTIVITY_CLEAR_TOP标志，方式二无法为Activity指定singleInstance模式</p>
 </li>
 </ul>
 </li>
 </ul>
-<p>  ​        </p>
 
       
 
