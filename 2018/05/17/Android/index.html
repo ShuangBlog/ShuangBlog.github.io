@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-20T15:39:08.625Z">
+<meta property="og:updated_time" content="2018-05-22T13:02:55.143Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
@@ -251,13 +251,13 @@
 <ul>
 <li><p>通过AndroidMenifest给Activity设置启动模式</p>
 <ul>
-<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//方式一</span></span><br><span class="line">&lt;activity android:name=<span class="string">".ModeActivity"</span></span><br><span class="line">           android:launchMode=<span class="string">"singleTop"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式一</span></span><br><span class="line">	&lt;activity android:name=<span class="string">".ModeActivity"</span></span><br><span class="line">          android:launchMode=<span class="string">"singleTop"</span>/&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 <li><p>通过Intent中设置标志位来指定Activity的启动模式</p>
 <ul>
-<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式二</span></span><br><span class="line">   Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">      intent.setClass(MainActivity.<span class="keyword">this</span>,ModeActivity.class);</span><br><span class="line">      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);</span><br><span class="line">      startActivity(intent);</span><br></pre></td></tr></table></figure>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式二</span></span><br><span class="line">	    Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">      intent.setClass(MainActivity.<span class="keyword">this</span>,ModeActivity.class);</span><br><span class="line">      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);</span><br><span class="line">      startActivity(intent);</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
@@ -281,9 +281,8 @@
 <ul>
 <li><p>一个过滤规则可以有多个action，action的匹配规则是Intent中的action必须和过滤规则中的其中一个action匹配（匹配指字符串完全一致，且区分大小写），Intent中必须有一个action。否则匹配失败</p>
 </li>
-<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  &lt;activity android:name=<span class="string">".ModeActivity"</span></span><br><span class="line">            android:launchMode=<span class="string">"singleTop"</span>&gt;</span><br><span class="line">            &lt;intent-filter &gt;</span><br><span class="line">                &lt;action android:name=<span class="string">"com.test.c"</span>/&gt;</span><br><span class="line">                &lt;</span><br><span class="line">   		  &lt;/intent-filter&gt;	</span><br><span class="line">  &lt;/activity&gt;</span><br><span class="line"><span class="comment">//  只要Intent中有"y.action.a"、"y.action.b"、"y.action.c"中一个就匹配成功</span></span><br></pre></td></tr></table></figure>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;activity android:name=<span class="string">".ModeActivity"</span></span><br><span class="line">          android:launchMode=<span class="string">"singleTop"</span>&gt;</span><br><span class="line">          &lt;intent-filter &gt;</span><br><span class="line">              &lt;action android:name=<span class="string">"com.test.c"</span>/&gt;</span><br><span class="line">              &lt;</span><br><span class="line"> 		  &lt;/intent-filter&gt;	</span><br><span class="line">&lt;/activity&gt;</span><br><span class="line">  <span class="comment">//  只要Intent中有"y.action.a"、"y.action.b"、"y.action.c"中一个就匹配成功</span></span><br></pre></td></tr></table></figure>
 </li>
-<li></li>
 </ul>
 </li>
 <li><p>category 的匹配规则</p>
@@ -294,7 +293,6 @@
 </li>
 <li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;activity android:name=<span class="string">".ModeActivity"</span></span><br><span class="line">          android:launchMode=<span class="string">"singleTop"</span>&gt;</span><br><span class="line">          &lt;intent-filter &gt;</span><br><span class="line">              &lt;action android:name=<span class="string">"com.test.a"</span>/&gt;</span><br><span class="line">              &lt;category android:name=<span class="string">"y.category.a"</span>/&gt;</span><br><span class="line">              &lt;category android:name=<span class="string">"y.category.b"</span>/&gt;</span><br><span class="line">              &lt;category android:name=<span class="string">"y.category.c"</span>/&gt;</span><br><span class="line">              &lt;category android:name=<span class="string">"android.intent.category.DEFAULT"</span>/&gt;</span><br><span class="line">          &lt;/intent-filter&gt;</span><br><span class="line"> &lt;/activity&gt;</span><br><span class="line"> <span class="comment">//什么3个category可以没有，但"android.intent.category.DEFAULT" 必须要有，</span></span><br></pre></td></tr></table></figure>
 </li>
-<li></li>
 </ul>
 </li>
 <li><p>data匹配规则</p>
@@ -340,12 +338,9 @@
 <li>静态成员或单例模式失效：不是同一块内存</li>
 <li>线程同步机制失效：因为不是同一块内存，所以不管是对象锁还是类锁都无法保证线程同步</li>
 <li>SharePreferences可靠性降低：SharePerferences不支持多个进程同时进行写操作，否则，有一定几率导致数据丢失</li>
-<li>Apolication会多次创建</li>
+<li>Apolication会多次创建<br>3、序列化</li>
 </ul>
 </li>
-</ul>
-<p>3、序列化</p>
-<ul>
 <li><p>序列化是指把java对象转化为字节序列并存储到一个存储媒介的过程。</p>
 </li>
 <li><p>Android不同进程有自己独立的内存空间，且相互不能进行访问。因此，必须将要传输的数据转化成能够在内存流通的形式</p>
@@ -360,25 +355,21 @@
 </li>
 <li><p>Parceable接口</p>
 <ul>
-<li><p>Android提供的序列化接口，只要实现这个接口就可以实现对象序列化</p>
-</li>
-<li><p>序列化由writeToParcel方法完成，最终通过Parcel中的一系列write方法完成的</p>
-</li>
-<li><p>反序列化由CREATOR完成，内部标明如何创建序列化对象和数组，最终通过Parcel的一系列read方法完成反序列化</p>
-</li>
-<li><p>内容描述功能有describeContents方法完成，几乎所有情况此方法都返回0，仅当当前对象存文件描述符是，此方法才返回1</p>
-</li>
-<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Persion</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Persion</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">Persion</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">        name = in.readString();</span><br><span class="line">        age = in.readInt();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//序列化</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel out, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">        out.writeString(name);</span><br><span class="line">        out.writeInt(age);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//反序列化</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;Persion&gt; CREATOR = <span class="keyword">new</span> Creator&lt;Persion&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Persion <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Persion(in);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Persion[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Persion[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li></li>
+<li>Android提供的序列化接口，只要实现这个接口就可以实现对象序列化</li>
+<li>序列化由writeToParcel方法完成，最终通过Parcel中的一系列write方法完成的</li>
+<li>反序列化由CREATOR完成，内部标明如何创建序列化对象和数组，最终通过Parcel的一系列read方法完成反序列化</li>
+<li>内容描述功能有describeContents方法完成，几乎所有情况此方法都返回0，仅当当前对象存文件描述符是，此方法才返回1</li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">-       <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Persion</span> <span class="keyword">implements</span> <span class="title">Parcelable</span> </span>&#123;</span><br><span class="line">          <span class="keyword">public</span> String name;</span><br><span class="line">          <span class="keyword">public</span> <span class="keyword">int</span> age;</span><br><span class="line">      </span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="title">Persion</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">              <span class="keyword">this</span>.name = name;</span><br><span class="line">              <span class="keyword">this</span>.age = age;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="function"><span class="keyword">protected</span> <span class="title">Persion</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">              name = in.readString();</span><br><span class="line">              age = in.readInt();</span><br><span class="line">          &#125;</span><br><span class="line">          </span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">describeContents</span><span class="params">()</span> </span>&#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line">      	<span class="comment">//序列化</span></span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeToParcel</span><span class="params">(Parcel out, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">              out.writeString(name);</span><br><span class="line">              out.writeInt(age);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">//反序列化</span></span><br><span class="line">          <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Creator&lt;Persion&gt; CREATOR = <span class="keyword">new</span> Creator&lt;Persion&gt;() &#123;</span><br><span class="line">              <span class="meta">@Override</span></span><br><span class="line">              <span class="function"><span class="keyword">public</span> Persion <span class="title">createFromParcel</span><span class="params">(Parcel in)</span> </span>&#123;</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">new</span> Persion(in);</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="meta">@Override</span></span><br><span class="line">              <span class="keyword">public</span> Persion[] newArray(<span class="keyword">int</span> size) &#123;</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">new</span> Persion[size];</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;;</span><br><span class="line">      </span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<ul>
 <li><p>两者区别：</p>
 <ul>
 <li>Serializable： ① Serializable是java的序列化接口 ② 使用简单，但开销很大 ③会在序列化时创建许多临时对象，容易引起GC </li>
 <li>Parcelable ：① Android序列化方式 ② 使用麻烦，但效率高 ③ 主要用于内存序列化上，将对象序列化到存储设备中或将对象序列化后通过网络传输也可以，但，过程会比较麻烦，所以，这两种情况建议使用Serializable</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -394,13 +385,11 @@
 <ul>
 <li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IPersionManager</span> <span class="keyword">extends</span> <span class="title">android</span>.<span class="title">os</span>.<span class="title">IInterface</span> </span>&#123;</span><br><span class="line"> 	 <span class="keyword">public</span> java.util.List&lt;com.example.aidl.Persion&gt; getPersionList() <span class="keyword">throws</span> android.os.RemoteException;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPersion</span><span class="params">(com.example.aidl.Persion persion)</span> <span class="keyword">throws</span> android.os.RemoteException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//内部类stub</span></span><br><span class="line">     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Stub</span> <span class="keyword">extends</span> <span class="title">Binder</span> <span class="title">implementscom</span> <span class="title">com</span>.<span class="title">example</span>.<span class="title">aidl</span>.<span class="title">IPersionManager</span></span>&#123;</span><br><span class="line">      	<span class="comment">//静态变量</span></span><br><span class="line">      	<span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TRANSACTION_getPersionList=( IBinder.FIRST_CALL_TRANSACTION + <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TRANSACTION_addPersion = (IBinder.FIRST_CALL_TRANSACTION + <span class="number">1</span>);</span><br><span class="line">         </span><br><span class="line">    	 <span class="comment">//stub方法</span></span><br><span class="line">         <span class="keyword">public</span> android.os.<span class="function">IBinder <span class="title">asBinder</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTransact</span><span class="params">(<span class="keyword">int</span> code,Parcel data, Parcel reply, <span class="keyword">int</span> flags)</span> <span class="keyword">throws</span> RemoteException</span>&#123;&#125;</span><br><span class="line">         </span><br><span class="line">  	   	<span class="comment">//内部类Proxy</span></span><br><span class="line">         <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">example</span>.<span class="title">aidl</span>.<span class="title">IPersionManager</span></span>&#123;</span><br><span class="line">           		<span class="comment">//成员变量</span></span><br><span class="line">             	<span class="keyword">private</span> IBinder mRemote;</span><br><span class="line">             </span><br><span class="line">             	<span class="comment">//Proxy 方法</span></span><br><span class="line">             	Proxy(IBinder remote) &#123;&#125;</span><br><span class="line">             	<span class="function"><span class="keyword">public</span> IBinder <span class="title">asBinder</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">            	<span class="keyword">public</span> java.lang.<span class="function">String <span class="title">getInterfaceDescriptor</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">             	<span class="keyword">public</span> java.util.List&lt;com.example.aidl.Persion&gt; getPersionList() <span class="keyword">throws</span> RemoteException&#123;&#125;</span><br><span class="line">             	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPersion</span><span class="params">(com.example.aidl.Persion persion)</span> <span class="keyword">throws</span> RemoteException</span>&#123;&#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Stub类：是一个Binder类，</p>
+<li><p>Stub类：是一个Binder类，此类方法:</p>
 <ul>
 <li>asInterface()：用于将服务器端的Binder对象转化为客户端所需的AIDL接口类型的对象，如果客户端和服务端位于同一进程，此方法返回服务端的Stub对象本身，否则，返回系统封装后的Stub.Proxy对象</li>
 <li>onTransact() ：此方法运行在服务端的Binder线程池，远处请求会通过系统底层封装后交给此方法处理。如果返回false，则客户端请求会失败</li>
 <li>asBinder() ：返回当前Binder对象</li>
-</ul>
-</li>
 </ul>
 </li>
 <li><p>Proxy/代理 类：是Stub的内部类，里面实现服务器端暴露个客户端的方法或数据</p>
@@ -412,6 +401,77 @@
 </ul>
 </li>
 </ul>
+</li>
+<li><p>Binder的linkToDeath和unLinkToDeath方法</p>
+<ul>
+<li>为了让客户端知道Binder连接是否断裂，Binder提供了上面的两个方法</li>
+<li>linkToDeath()：给Binder设置一个死亡（断裂）代理，当Binder死亡时，会收到通知，从而重新发起连接请求来恢复连接</li>
+</ul>
+</li>
+</ul>
+<p>5、Android中IPC方式</p>
+<ul>
+<li>Bundle：它实现了Parcelable接口，所以可以在不同进程间进行传输，但传输的数据必须能够被序列化</li>
+<li>文件共享：两个进程通过读/写同一个文件进行数据交换，适合对数据同步要求不高的进程间通信，且要处理并发读/写问题</li>
+<li>SharedPreferences：也属于文件的一种，但由于在内存中有一份SHaredPreferences文件缓存，所以，在多进程模式下，它的读/写是不可靠的，高并发的读/写操作有很大几率丢失数据</li>
+<li>messenger</li>
+<li>AIDL</li>
+<li>ContenProvider</li>
+<li>Socket：套接字<ul>
+<li>流式套接字，对应TCP</li>
+<li>用户数据报套接字： 对应UDP</li>
+</ul>
+</li>
+</ul>
+<p>6、IPC优缺点</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">优点</th>
+<th style="text-align:center">缺点</th>
+<th style="text-align:center">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Bundle</td>
+<td style="text-align:center">简单易用</td>
+<td style="text-align:center">只能传输Bundle支持的数据类型</td>
+<td style="text-align:center">四大组件间进程通信</td>
+</tr>
+<tr>
+<td style="text-align:center">文件共享</td>
+<td style="text-align:center">简单易用</td>
+<td style="text-align:center">不适合高并发场景且无法做到进程及时通信</td>
+<td style="text-align:center">无并发访问情形，交换简单的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">AIDL</td>
+<td style="text-align:center">功能强大，支持一对多并发通信，支持即时通信</td>
+<td style="text-align:center">需要处理好线程同步</td>
+<td style="text-align:center">一对多通信且有RPC（远程调用）需求</td>
+</tr>
+<tr>
+<td style="text-align:center">Messenger</td>
+<td style="text-align:center">功能一般，支持一对多并发通信和实时通信</td>
+<td style="text-align:center">不能很好处理高并发场景，不支持RPC，只能传输Bundle支持数据类型</td>
+<td style="text-align:center">低并发的一对多即时通信，无RPC需求，或无需返回结果的RPC需求</td>
+</tr>
+<tr>
+<td style="text-align:center">ContentProvider</td>
+<td style="text-align:center">数据源访问方面功能强大，支持一对多并发数据共享</td>
+<td style="text-align:center">受约束的AIDL，主要题数据源的CRUD操作</td>
+<td style="text-align:center">一对多进程间数据共享</td>
+</tr>
+<tr>
+<td style="text-align:center">Socket</td>
+<td style="text-align:center">功能强大，通过网络传输字节流，支持一对多并发实时通信</td>
+<td style="text-align:center">实现稍微麻烦，不支持直接的RPC</td>
+<td style="text-align:center">网络数据交换</td>
+</tr>
+</tbody>
+</table>
 <p>10、</p>
 
       
