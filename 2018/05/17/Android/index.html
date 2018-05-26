@@ -16,10 +16,12 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-22T13:02:55.143Z">
+<meta property="og:image" content="http://yoursite.com/2018/05/17/Android/view-绘制.png">
+<meta property="og:updated_time" content="2018-05-26T12:42:51.412Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
+<meta name="twitter:image" content="http://yoursite.com/2018/05/17/Android/view-绘制.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -172,7 +174,7 @@
 	<div id="toc-article" class="toc-article">
 	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
 		<strong class="toc-title">文章目录</strong>
-           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li></ol>
+           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li></ol>
          </div>
    <script type="text/javascript">
 	function showToc(){
@@ -472,6 +474,220 @@
 </tr>
 </tbody>
 </table>
+<h2 id="Android中的-View"><a href="#Android中的-View" class="headerlink" title="Android中的 View"></a><center>Android中的 View</center></h2><p>1、View：Android中所有控件的基类，ViewGroup也继承View</p>
+<ul>
+<li><p>View的位置参数：View的位置由它的四个顶点决定，这些顶点坐标都是相对于父容器来说的</p>
+<ul>
+<li>top：左上角纵坐标，通过getTop()方法获取</li>
+<li>left：坐上角横坐标，通过getLeft()方法获取</li>
+<li>right：右下角横坐标，通过getRight() 方法获取</li>
+<li>bottom：右下角纵坐标，通过getBottom()方法获取</li>
+</ul>
+</li>
+<li><p>MotionEvent和TouchSlop</p>
+<ul>
+<li><p>MotionEvent：表示手指在触摸屏幕后产生的一系列事件,常用的有</p>
+<ul>
+<li><p>ACTION_DOWN：手指刚接触屏幕</p>
+</li>
+<li><p>ACTION_MOVE：手指在屏幕上移动</p>
+</li>
+<li><p>ACTION_UP：手指从屏幕松开的瞬间</p>
+</li>
+<li><p>ACTION_CANCEL：手势取消</p>
+</li>
+<li><p>事件发生的位置,x或y轴</p>
+<ul>
+<li>getX()：事件发生时，触摸中间区域的x轴</li>
+<li>getY()：事件发生时，触摸中间区域的x轴</li>
+<li>getRawX()：事件发生时，触摸中间区域的x轴</li>
+<li>getRawY()：事件发生时，触摸中间区域的x轴</li>
+</ul>
+<p>getX/Y 返回的是相对当前View左上角的x和y轴坐标；getRawX/Y返回到的是相对于手机屏幕左上角的x和y轴坐标</p>
+</li>
+</ul>
+</li>
+<li><p>TouchSlop</p>
+<ul>
+<li>TouchSlop：系统所能识别出的滑动最小距离，小于这个常量系统则不认为它是滑动</li>
+<li>通过ViewConfiguration.get(getContext()).getScaledTouchSlop()方法获得，</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>VelocityTracker、GestureDetector、Srcoller</p>
+<ul>
+<li><p>VelocityTracker（速度追踪）：追踪手指滑动过程中的水平/垂直方法速度（速度：指一段时间内手指划过的像素个数），从右往左滑动时，水平方向速度为负值</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//VelocityTracker</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_view);</span><br><span class="line">        <span class="comment">//获取实例</span></span><br><span class="line">        mTracker = VelocityTracker.obtain();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//追踪当前点击事件的速度</span></span><br><span class="line">        mTracker.addMovement(event);</span><br><span class="line">        <span class="keyword">switch</span> (event.getAction())&#123;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">                <span class="comment">//设置一道速度单位，即1000毫秒移动的像素</span></span><br><span class="line">                mTracker.computeCurrentVelocity(<span class="number">1000</span>);</span><br><span class="line">                <span class="comment">//获取手指在x轴的加速度</span></span><br><span class="line">                <span class="keyword">float</span> xVelocity = mTracker.getXVelocity();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">                <span class="comment">//回收对象</span></span><br><span class="line">                mTracker.recycle();</span><br><span class="line">                mTracker = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onTouchEvent(event);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>GestureDetector（手势检测）：检测用户的点击、滑动、长按、双击等（只是滑动监听相关，建议使用onTouchEvent，监听双击就使用GestureDetector）</p>
+</li>
+<li><p>Scroller：弹性滑动对象，用于实现View的弹性滑动。可以实现由过度效果的滑动，需要配合View的ComputeSrcoll方法使用</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>2、View的滑动</p>
+<ul>
+<li><p>使用scrollTo/ScrollBy，只能改变View的内容的位置，不能改变View在布局中的位置</p>
+<ul>
+<li>scrollTo：基于所传递参数的绝对滑动，即每次滑动都是从控件原本的位置滑动指定的距离</li>
+<li>scrollBy：也是调用scrollTo方法，它实现了基于当前位置的相对滑动</li>
+<li>mScrollX：总值等于View左边缘和View内容左边缘的水平距离，当View左边缘在View内容左边缘右边时，mScrollX为正值，反之为负值，即从左往右滑动，mScrollX为负</li>
+<li>mScrollY：总值等于View上边缘和View内容上边缘的竖直方向距离，当View上边缘在View内容上边缘的下边时，mScrollY为正值，反之为负，即从上往下滑动则它为负值</li>
+</ul>
+</li>
+<li><p>使用动画，主要操作translationX和translationY属性</p>
+<ul>
+<li>View动画：对View的影像操作，不能真正改变View的位置参数，包括宽/高，需要将fillAfter属性设置为true才能保持动画结果不消失，点击移动后的位置不会触发点击事件，因为View真正位置没有改变，新位置上的是View影像</li>
+<li>属性动画：使用属性动画不会出现上面的问题，但在Android3.0以下无法使用属性动画</li>
+</ul>
+</li>
+<li><p>改变布局参数，LayoutParams</p>
+</li>
+<li><p>滑动方式对比</p>
+<ul>
+<li>|     方式     |                  优点                  |                   缺点                   |<br>| :———-: | :————————————: | :————————————–: |<br>| srcollTo/By  |   实现方便，不影响内部元素的点击事件   |               只能滑动内容               |<br>|   View动画   |         可以实现复杂的动画效果         | 不能改变View本身的属性，影响和用户的交互 |<br>|   属性动画   | 可以实现复杂的动画，改变View的自身属性 |   Android3.0以下不能改变View的自身属性   |<br>| LayoutParams |            改变View自身属性            |               实现稍微复杂               |</li>
+</ul>
+</li>
+<li><p>总结：</p>
+<ul>
+<li>scrollTo/By：操作简单，适合对View内容的滑动</li>
+<li>View动画：操作简单，适合没有交互的View和复杂的动画效果</li>
+<li>改变布局参数：操作稍微复杂，适用于和View有交互的动画场景</li>
+</ul>
+</li>
+</ul>
+<p>3、弹性滑动</p>
+<ul>
+<li>使用Scroller：在一定时间内通过不断的计算当前需要滑动的位置，然后调用Scroller完成小幅度的移动</li>
+<li>使用动画：</li>
+<li>使用延时策略：如通过Handler发送延迟消息，然后在handleMessage（）方法里面调用scrollTo方法移动控件</li>
+</ul>
+<p>4、View的事件方法机制</p>
+<ul>
+<li>disPatchTouchEvent(MotionEvent ev)：用来进行事件发放，如果事件能够传递给当前View，此方法一定会被调用</li>
+<li>onInterceptTouchEvent(MotionEvent event)：用来判断是否拦截某个事件，如果当前View拦截了某个事件，则同一事件序列中此方法不再次调用</li>
+<li>onTouchEvent(MotionEvent event)：用来处理点击事件，返回True代表消耗事件，false代表不消耗</li>
+<li>对ViewGroup来说，点击事件发生后，首先传递给当前ViewGroup，当前View的dispathTouchEvent方法会被调用，如果此ViewGroup的onInterceptTouchEvent方法返回true，则代表要拦截此事件，就把事件交给此ViewGroup的onTouchEvent方法处理，如果此ViewGoup的onInterceptTouchEvent方法返回false就表示不拦截当前事件，当前事件就会传递给它的子元素，然后子元素的dispatchTouchEvent方法就会被调用，以此类推，知道事件被最终处理</li>
+<li>onTouchListener优先级比onTouchEvent高</li>
+<li>事件传递过程顺序：Activity-&gt;Window-&gt;View,如果一个View的onTouchEvent返回false，则此View的父容器的onTouchEvent方法将会调用，如果所有元素都不处理此事件，则此事件最终会传递给Activity出路</li>
+<li>结论：<ul>
+<li>同一事件序列是指：从手指接触屏幕那一刻开始到手指离开屏幕那一刻结束的过程所产生的一系列事件</li>
+<li>一个View一旦决定拦截，则一个事件序列都只能由它处理且它的onInterceptTouchEvent不会再被调用，</li>
+<li>正常情况，一个事件序列只能被一个View拦截且消耗，可以通过onTouchEvent方法强行传递给其他View处理</li>
+<li>一个View一旦开始处理事件，如果它的onTouchEvent方法返回false，则同一事件序列的其他事件都不会交给它处理，而是交给它的父控件的onTouchEvent处理</li>
+<li>如果所有View不消耗除ACTION_DOWN以外的事件，这个事件就会消失，父控件的onTouchEvent并不会调用</li>
+<li>ViewGroup默认不拦截任何事件</li>
+<li>View没有onInterceptTouchEvent方法</li>
+<li>View的onTouchEvent方法默认消耗事件（返回true），除非它是不可点击的</li>
+<li>View的enable属性不影响onTouchEvent方法的默认返回值</li>
+<li>onClick方法发生的前提是View是可以点击的，且它收到down和up事件</li>
+<li>事件传递总是先传递给父元素，然后由父元素分发给子View</li>
+</ul>
+</li>
+</ul>
+<p>5、View工作原理</p>
+<ul>
+<li><p>ViewRoot：是连接WindowManager和DecorView的纽带，View的三大流程都是通过ViewRoot完成的，首先是从ViewRoot的performTraversals方法开始的</p>
+<ul>
+<li>measure：决定了View的宽高</li>
+<li>layout：决定了View的四个顶点和实际的View宽高</li>
+<li>draw：绘制控件内容</li>
+</ul>
+<p><img src="/2018/05/17/Android/view-绘制.png" alt="view的绘制流程"></p>
+</li>
+</ul>
+<p>6、获取某个View的宽高</p>
+<ul>
+<li>不能再Activity的生命周期方法中获取View的宽高，因为View的Mesure过程和Activity的生命周期不同步</li>
+<li>获取View宽高的四个方法<ul>
+<li>onWindowFocusChanged()方法，此时View已经初始化完毕，可以获取宽高，此方法会在Activity窗口得到或者失去焦点时均会调用</li>
+<li>View.post(runnable)：通过post将runnable放到消息队列底部，当Looper调用此runnable时，View已经初始化好了</li>
+<li>ViewTreeObserve</li>
+<li>View.mesure：通过手动对View进行mesure得到View的宽高</li>
+</ul>
+</li>
+</ul>
+<p>7、自定义View</p>
+<ul>
+<li><p>自定义View的分类</p>
+<ul>
+<li><p>继承View重写onDraw方法：主要用于实现一些不规则的效果，需要自己处理wrap_conten和padding</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CircleView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Paint mPaint =<span class="keyword">new</span> Paint(Paint.ANTI_ALIAS_FLAG);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircleView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context,<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircleView</span><span class="params">(Context context, @Nullable AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, attrs,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircleView</span><span class="params">(Context context, @Nullable AttributeSet attrs, <span class="keyword">int</span> defStyleAttr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(context, attrs, defStyleAttr,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CircleView</span><span class="params">(Context context, @Nullable AttributeSet attrs, <span class="keyword">int</span> defStyleAttr, <span class="keyword">int</span> defStyleRes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyleAttr, defStyleRes);</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;mPaint.setColor(Color.BLUE);&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">        <span class="comment">//对wrap_content情况进行处理</span></span><br><span class="line">        <span class="keyword">int</span> widthMode = MeasureSpec.getMode(widthMeasureSpec);</span><br><span class="line">        <span class="keyword">int</span> widthSize = MeasureSpec.getSize(widthMeasureSpec);</span><br><span class="line">        <span class="keyword">int</span> heightMode = MeasureSpec.getMode(heightMeasureSpec);</span><br><span class="line">        <span class="keyword">int</span> heightSize = MeasureSpec.getSize(heightMeasureSpec);</span><br><span class="line">        <span class="keyword">int</span> defWidth = <span class="number">200</span>;</span><br><span class="line">        <span class="keyword">int</span> defHeight = <span class="number">200</span>;</span><br><span class="line">        <span class="keyword">if</span> (widthMode==MeasureSpec.AT_MOST&amp;&amp;heightMode==MeasureSpec.AT_MOST)&#123;</span><br><span class="line">            setMeasuredDimension(defWidth,defHeight);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (widthMode==MeasureSpec.AT_MOST)&#123;</span><br><span class="line">            setMeasuredDimension(defWidth,heightSize);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (heightMeasureSpec==MeasureSpec.AT_MOST)&#123;</span><br><span class="line">            setMeasuredDimension(widthSize,MeasureSpec.AT_MOST);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">        <span class="keyword">int</span> width = getWidth();</span><br><span class="line">        <span class="keyword">int</span> height = getHeight();</span><br><span class="line">        <span class="keyword">int</span> radius = Math.max(width,height)/<span class="number">2</span>;</span><br><span class="line">        <span class="comment">//drawCircle：画圆 drawLine：画线 drawArc：画弧 drawOval：画椭圆 drawRect：画矩形</span></span><br><span class="line">        canvas.drawCircle(width/<span class="number">2</span>,height/<span class="number">2</span>,radius,mPaint);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>继承ViewGroup：用于实现自定义的布局，即除LinearLayout、RelativeLayout等系统布局之外的新布局</p>
+</li>
+<li><p>继承特定的View（如:TextView）:用于扩展已有View的功能</p>
+</li>
+<li><p>继承特定的ViewGroup（如：LinearLayout）：用于实现几种View组合在一起的效果</p>
+</li>
+</ul>
+</li>
+<li><p>须知：</p>
+<ul>
+<li>让View支持warp_content，在View在执行onMeasure时，wrap_comtent相当于math_parent效果，所以在自定义直接继承View时，需要在measure方法里对wrap_content进行处理</li>
+<li>必要时，让View支持padding，直接继承View的控件，需要在draw方法中处理padding，否则padding属性无法起作用；直接继承ViewGroup的控件，需要在onMeasure和onLayout中处理padding和子元素的margin，否则，它们会失效</li>
+<li>在View中尽量不适用Handler：View内部提供了post系列的方法，可以代替Handler，除非你要使用Handler发消息</li>
+<li>在onDeracheFromWindow方法中停止线程和动画，在含此View的Activity退出或当前View被remove时，此方法会被调用</li>
+<li>View带有滑动嵌套情形时，需要处理好滑动监听</li>
+</ul>
+</li>
+</ul>
+<h2 id="RemoteViews"><a href="#RemoteViews" class="headerlink" title="RemoteViews"></a><center>RemoteViews</center></h2><p>1、RemoteViews：主要用于在其他进程中显示并更新View界面，如，通知栏和桌面小部件，它为跨进程更新界面提供了一系列的set方法</p>
+<ul>
+<li><p>用于系统通知</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">  <span class="comment">//创建通知实例，并设置标题、内容</span></span><br><span class="line">   Notification notification = <span class="keyword">new</span> Notification();</span><br><span class="line">      notification.icon = R.mipmap.ic_launcher;</span><br><span class="line">      notification.tickerText = <span class="string">"NOTIFICATION"</span>;</span><br><span class="line">      notification.when= System.currentTimeMillis();</span><br><span class="line">      notification.flags = Notification.FLAG_AUTO_CANCEL;</span><br><span class="line">   <span class="comment">//获取延迟意图</span></span><br><span class="line">      Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, ViewActivity.class);</span><br><span class="line">      PendingIntent pendingIntent  =PendingIntent.getActivities(<span class="keyword">this</span>,<span class="number">0</span>,<span class="keyword">new</span> Intent[]&#123;intent&#125;,PendingIntent.FLAG_CANCEL_CURRENT);</span><br><span class="line">  <span class="comment">//创建remoteView并设置布局</span></span><br><span class="line">      RemoteViews remoteViews = <span class="keyword">new</span> RemoteViews(getPackageName(),R.layout.remote_view);</span><br><span class="line">      remoteViews.setTextViewText(R.id.tv_title,<span class="string">"hello"</span>);</span><br><span class="line">      remoteViews.setImageViewResource(R.id.iv_icon,R.drawable.dm);</span><br><span class="line">      PendingIntent rVPending = PendingIntent.getActivities(<span class="keyword">this</span>,<span class="number">0</span>,<span class="keyword">new</span> Intent[]&#123;<span class="keyword">new</span> Intent(<span class="keyword">this</span>,ModeActivity.class)&#125;,PendingIntent.FLAG_CANCEL_CURRENT);</span><br><span class="line">      remoteViews.setOnClickPendingIntent(R.id.iv_icon,rVPending);</span><br><span class="line">      notification.contentView = remoteViews;</span><br><span class="line">      notification.contentIntent  =pendingIntent;</span><br><span class="line"><span class="comment">//获取系统通知服务</span></span><br><span class="line">      NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);</span><br><span class="line">      manager.notify(<span class="number">2</span>,notification);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>用于桌面小部件（待完善）</p>
+</li>
+<li><p>支持的View类型，使用别的会抛出异常</p>
+<ul>
+<li>Layout<ul>
+<li>FrameLayout、LinearLayout、RelativeLayout、GridLayout</li>
+</ul>
+</li>
+<li>View<ul>
+<li>Button、ImageButton、ImageView、ProgressBar、TextView、AnalogClock、Chronometer、ViewFlipper、ListView、GridView、StackView、AdapterViewFlipper、ViewStub</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>2、PendingIntent</p>
+<ul>
+<li>概述：表示处于一种待定、即将发生的意图，和Intent的区别是PendingIntent在将来某个不确定的时刻发生，Intent是立即发生，一般用于给RemoteViews添加点击事件</li>
+<li>分类：<ul>
+<li>启动Activity：getActivity(Content content,int requestCode,Intent intent,int flags),返回一个PendingIntent，该待定意图发生时，效果相当于startACtivity(intent)</li>
+<li>启动Service：getService(Content content,int requestCode,Intent intent,int flags)返回一个PendingIntent，该待定意图发生时，效果相当于startServ(intent)</li>
+<li>发送广播：getBroadcast(Content content,int requestCode,Intent intent,int flags)返回一个PendingIntent,该待定意图发生时，效果相当于sendBroadcast(intent)</li>
+</ul>
+</li>
+<li>PendingIntent匹配规则<ul>
+<li>内部的Intent相同且requestCode也相同则PendingIntent相同</li>
+<li>Intent匹配规则：如果两个Intent的ComponetName（组件名称）和intent-filter都相同，则Intent相同，Extras不参与Intent的匹配</li>
+</ul>
+</li>
+<li>PendingIntent的flags（在PendingIntent匹配时有用）<ul>
+<li>FLAG_ONE_SHOT：当前描述的的PendingIntent只能被使用一次，然后就会自动cancel，如果后续还有相同的PendingIntent，则它们的send方法就会调用失败。例，对于通知栏来说，如果采用此标志位，则同类的通知只能使用一次，后续通知单价后无法打开</li>
+<li>FLAG_NO_CREATE：当前描述的PendingIntent不会主动创建，如果当前PendingIntent之前不存在，则，getActivity、getService、getBroadcast方法会直接返回null，此标志位无法单独使用</li>
+<li>FlAG_CANCEL_CURRENT：当前描述的PendingIntent如果存在，则，它们都会被取消，然后系统会创建一个新的PendingIntent。对通知栏消息来说，被取消掉的消息单击后无法打开</li>
+<li>FLAG_UPDATE_CURRENT：当前描述的PendingIntent如果存在，则它们都会被更新，即它们的Intent中的Extras会被替换成最新的</li>
+</ul>
+</li>
+</ul>
+<p>##<center>Android中的Drawable</center></p>
 <p>10、</p>
 
       
@@ -596,7 +812,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li></ol>
                     </div>
                 </span>
             </div>
