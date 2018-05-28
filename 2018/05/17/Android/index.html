@@ -17,7 +17,7 @@
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/17/Android/view-绘制.png">
-<meta property="og:updated_time" content="2018-05-28T13:57:45.662Z">
+<meta property="og:updated_time" content="2018-05-28T14:07:00.254Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
@@ -550,9 +550,7 @@
 <li><p>改变布局参数，LayoutParams</p>
 </li>
 <li><p>滑动方式对比</p>
-<ul>
-<li>|     方式     |                  优点                  |                   缺点                   |<br>| :———-: | :————————————: | :————————————–: |<br>| srcollTo/By  |   实现方便，不影响内部元素的点击事件   |               只能滑动内容               |<br>|   View动画   |         可以实现复杂的动画效果         | 不能改变View本身的属性，影响和用户的交互 |<br>|   属性动画   | 可以实现复杂的动画，改变View的自身属性 |   Android3.0以下不能改变View的自身属性   |<br>| LayoutParams |            改变View自身属性            |               实现稍微复杂               |</li>
-</ul>
+<p>| 方式         | 优点                                   | 缺点                                     |<br>| ———— | ————————————– | —————————————- |<br>| srcollTo/By  | 实现方便，不影响内部元素的点击事件     | 只能滑动内容                             |<br>| View动画     | 可以实现复杂的动画效果                 | 不能改变View本身的属性，影响和用户的交互 |<br>| 属性动画     | 可以实现复杂的动画，改变View的自身属性 | Android3.0以下不能改变View的自身属性     |<br>| LayoutParams | 改变View自身属性                       | 实现稍微复杂                             |</p>
 </li>
 <li><p>总结：</p>
 <ul>
@@ -1065,6 +1063,11 @@
 </li>
 </ul>
 <p>##<center>Android的消息机制<a href="/2018/05/06/Code/" title="自己选择的路，哭着也要走完">自己选择的路，哭着也要走完</a></center></p>
+<p>1、Handler是Android消息机制的上层接口，所以开发中只需要和Handler交互即可。Android的消息机制主要指Handler的运行机制。Handler的运行需要MessageQueue和Looper的支持</p>
+<ul>
+<li>MessageQueue：消息队列</li>
+<li>Looper：</li>
+</ul>
 <p>10、</p>
 
       
