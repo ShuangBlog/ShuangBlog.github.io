@@ -17,7 +17,7 @@
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/17/Android/view-绘制.png">
-<meta property="og:updated_time" content="2018-05-26T12:42:51.412Z">
+<meta property="og:updated_time" content="2018-05-28T13:57:45.662Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
@@ -174,7 +174,7 @@
 	<div id="toc-article" class="toc-article">
 	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
 		<strong class="toc-title">文章目录</strong>
-           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li></ol>
+           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Window和WindowManager"><span class="toc-number">5.</span> <span class="toc-text">Window和WindowManager</span></a></li></ol>
          </div>
    <script type="text/javascript">
 	function showToc(){
@@ -688,6 +688,383 @@
 </li>
 </ul>
 <p>##<center>Android中的Drawable</center></p>
+<p>1、Drawable：表示一种可以在Canvas上进行绘制的抽象概念，一般通过XML定义。Drawable内部宽/高这两个参数比较重要，通过getIntrinsicWidth和getIntrinsicHeight方法获得，但，并不是所有的Drawable都有内部宽高，如，一个意思所形成的Drawable</p>
+<p>2、Drawable分类：</p>
+<ul>
+<li><p>BitmapDrawable</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;bitmap xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:src=<span class="string">"@drawable/dxx"</span></span><br><span class="line">        android:antialias=<span class="string">"[false|true]"</span></span><br><span class="line">        android:dither=<span class="string">"[false|true]"</span></span><br><span class="line">        android:filter=<span class="string">"[false|true]"</span></span><br><span class="line">        android:gravity=<span class="string">""</span></span><br><span class="line">        android:mipMap=<span class="string">"[false|true]"</span></span><br><span class="line">        android:tileMode=<span class="string">"[disabled|clamp|repeat|mirror]"</span></span><br><span class="line">    &gt;</span><br><span class="line">&lt;/bitmap&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>属性含义：</p>
+<ul>
+<li>src：图片资源id</li>
+<li>antialias：是否开启抗锯齿。开启后图片会变得平滑</li>
+<li>dither：是否开启抖动效果。当图片像素配置和点击屏幕像素配置不一致时，开启它会让高质量的图片在低质量的屏幕上保持较好的显示效果</li>
+<li>filter：是否开启过滤效果。当图片尺寸被拉伸或压缩时，开启时刻保持较好显示效果</li>
+<li>gravity：当图片小于容器尺寸时，此选项可以对图片进行定位。可以通过”|”组合多种效果</li>
+<li>mipMap：纹理映射</li>
+<li>titeMode：平铺模式。默认disable（不平铺），开启此模式后，gravity属性会无效。<ul>
+<li>disable：不平铺</li>
+<li>repeat：水平和竖直方向上的平铺效果</li>
+<li>mirror：水平和竖直方向上的投影效果</li>
+<li>clamp：图片四周像素会扩展到周围区域</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ShapeDrawable：通过颜色构造图形</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;shape xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:shape=<span class="string">"[rectangle|oval|line|ring]"</span></span><br><span class="line">    &gt;</span><br><span class="line">    &lt;corners</span><br><span class="line">        android:radius=<span class="string">"integer"</span></span><br><span class="line">        android:topLeftRadius=<span class="string">"integer"</span></span><br><span class="line">        android:topRightRadius=<span class="string">"integer"</span></span><br><span class="line">        android:bottomLeftRadius=<span class="string">"integer"</span></span><br><span class="line">        android:bottomRightRadius=<span class="string">"integer"</span>/&gt;</span><br><span class="line">    &lt;gradient</span><br><span class="line">        android:angle=<span class="string">"integer"</span></span><br><span class="line">        android:centerX=<span class="string">"integer"</span></span><br><span class="line">        android:centerY=<span class="string">"integer"</span></span><br><span class="line">        android:centerColor=<span class="string">"color"</span></span><br><span class="line">        android:endColor=<span class="string">"color"</span></span><br><span class="line">        android:gradientRadius=<span class="string">"integer"</span></span><br><span class="line">        android:startColor=<span class="string">"color"</span></span><br><span class="line">        android:type=<span class="string">"[linear|radial|sweep]"</span></span><br><span class="line">        android:useLevel=<span class="string">"[true|false]"</span>/&gt;</span><br><span class="line">    &lt;solid</span><br><span class="line">        android:color=<span class="string">"color"</span>/&gt;</span><br><span class="line">    &lt;padding</span><br><span class="line">        android:left=<span class="string">""</span></span><br><span class="line">        android:right=<span class="string">""</span></span><br><span class="line">        android:top=<span class="string">""</span></span><br><span class="line">        android:bottom=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;size android:width=<span class="string">""</span></span><br><span class="line">          android:height=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;stroke</span><br><span class="line">        android:width=<span class="string">""</span></span><br><span class="line">        android:color=<span class="string">""</span></span><br><span class="line">        android:dashWidth=<span class="string">""</span></span><br><span class="line">        android:dashGap=<span class="string">""</span>/&gt;</span><br><span class="line">&lt;/shape&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>shape：表示图形形状</p>
+<ul>
+<li>rectangle：矩形。</li>
+<li>oval：椭圆</li>
+<li>line：横线，必须通过“troke”标签知道线的宽度、颜色等信息</li>
+<li>ring：圆环，必须通过“troke”标签知道线的宽度、颜色等信息。ring有以下五个特殊的属性：<ul>
+<li>innerRadius：表示圆环内半径，和innerRadiusRation同时存在时，以innerRadius属性为准</li>
+<li>thickness：圆环厚度，和thicknessRation同时存在时，以thickness属性为准</li>
+<li>innerRadiusRation：内半径占整个Drawable的宽度比例，默认为9，计算方法：如果为n，则内半径=宽度/n</li>
+<li>thicknessRation：厚度占整个Drawable的宽度比例，默认为3，计算方法：如果为n，则，厚度=宽度/n，</li>
+<li>useLevel：一般应该设置为false，否则有可能无法达到预期效果</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>corners：表示shape的四个角的角度</p>
+<ul>
+<li>radius：同时为四个角设置相同角度，优先级低，被其他四个属性覆盖</li>
+<li>topLeftRadius：设置左上角的角度</li>
+<li>topRightRadius：设置右上角角度</li>
+<li>bottomLeftRadius：设置左下角的角度</li>
+<li>bottomRightRadius：设置右下角角度</li>
+</ul>
+</li>
+<li><p>gradient：与”solid”标签互斥，表示渐变效果，solid表示纯色填充</p>
+<ul>
+<li>angle：渐变角度，默认为零，值必须为45的倍数。0表示从左到右，90表示从下到上</li>
+<li>centerX：渐变中心点横坐标</li>
+<li>centerY：渐变中心点纵坐标</li>
+<li>startColor：渐变起始色</li>
+<li>centerColor：渐变中心色</li>
+<li>endColor：渐变结束色</li>
+<li>gradientRadius：渐变半径，仅当type=”radial”时有效</li>
+<li>useLevel：一般为false，当Drawable作为StateListDrawable使用时为true</li>
+<li>type：渐变类别<ul>
+<li>Linear：线性渐变（默认）</li>
+<li>radial：径向渐变</li>
+<li>sweep：扫描渐变</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>stroke：shape的描边</p>
+<ul>
+<li>width：描边的宽度</li>
+<li>color：描边颜色</li>
+<li>dashWidth：组成虚线线段的宽度</li>
+<li>dashGap：虚线线段之间的间隔。如果dashWidth和dashGap有一个为0，则，虚线效果不能生效</li>
+</ul>
+</li>
+<li><p>padding：表示包含shape的View的空白</p>
+</li>
+<li><p>size：表示shape的大小</p>
+<ul>
+<li>width：表示shape的宽</li>
+<li>height：表示shape的高</li>
+<li>这两个属性表示shape的固有大小，但并不是最终显示大小</li>
+</ul>
+</li>
+<li><p>LayerDrawable：是一种层次化的Drawable，标签是”layer-list”，一个layer可以包含多个item，每个item表示一个Drawable</p>
+</li>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;layer-list xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span><br><span class="line">&lt;item android:drawable=<span class="string">""</span></span><br><span class="line">      android:id=<span class="string">""</span></span><br><span class="line">      android:top=<span class="string">""</span></span><br><span class="line">      android:bottom=<span class="string">""</span></span><br><span class="line">      android:left=<span class="string">""</span></span><br><span class="line">      android:right=<span class="string">""</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/layer-list&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>top、bottom、left、right：表示Drawable相对于View的上下左右的偏移量</p>
+</li>
+<li><p>drawable：直接引用已有的Drawable资源</p>
+</li>
+</ul>
+</li>
+<li><p>StateListDrawable：表示Drawable集和，每个Drawable都对应View的一种转态，系统会根据View的转态选择合适的Drawable。对应”selector”标签</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;selector xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:constantSize=<span class="string">"[true|false]"</span></span><br><span class="line">          android:dither=<span class="string">"[true|false]"</span></span><br><span class="line">          android:variablePadding=<span class="string">"[true|false]"</span>&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">""</span></span><br><span class="line">          android:state_pressed=<span class="string">""</span></span><br><span class="line">          android:state_focused=<span class="string">""</span></span><br><span class="line">          android:state_hovered=<span class="string">""</span></span><br><span class="line">          android:state_selected=<span class="string">""</span></span><br><span class="line">          android:state_enabled=<span class="string">""</span></span><br><span class="line">          android:state_checkable=<span class="string">""</span></span><br><span class="line">          android:state_checked=<span class="string">""</span></span><br><span class="line">          android:state_activated=<span class="string">""</span></span><br><span class="line">          android:state_window_focused=<span class="string">""</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/selector&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>constantSize：StateListDrawable的固有大小是否随着状态的改变而改变，true表示固有大小保持不变，false则会随着状态的改变而改变，默认为false</p>
+</li>
+<li><p>dither：是否启动抖动效果，开启此选项可以让图片在低质量的屏幕上有较好的显示效果，默认为true</p>
+</li>
+<li><p>variablePadding：表示StateListDrawable的padding是否随着状态的改变而改变，true表示随着状态改变而改变，false则表示它的padding是内部使用Drawable的padding的最大值，默认为false</p>
+</li>
+<li><p>item：表示一个具体的Drawable</p>
+<ul>
+<li>state_pressed：表示按下状态，如Button按下后仍然没有松开时的状态</li>
+<li>state_focused：表示View已经获取了焦点</li>
+<li>state_selected：表示用户选择了View</li>
+<li>state_checked：表示愿意选择了View，一般用于CheckBox、RadioButton这类在选中和非选中状态之间切换的View</li>
+<li>state_enable：当前View处于可用状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>LevelListDrawable：表示一个Drawable集合，集合中的每个Drawable都有一个等级，根据等级切换对应的Drawable。对应”level-list”标签</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;level-list xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span><br><span class="line">&lt;item android:drawable=<span class="string">""</span></span><br><span class="line">      android:maxLevel=<span class="string">""</span></span><br><span class="line">      android:minLevel=<span class="string">""</span>/&gt;</span><br><span class="line">&lt;/level-list&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>每个item表示一个Drawable，并且有对应的等级范围。最大等级为10000，最小等级为0（默认值）</p>
+</li>
+</ul>
+</li>
+<li><p>TransitionDrawable：用于实现两个Drawable之间的淡入淡出效果，对应”transition”标签</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;transition xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span><br><span class="line">&lt;item</span><br><span class="line">    android:drawable=<span class="string">""</span></span><br><span class="line">    android:id=<span class="string">""</span></span><br><span class="line">    android:top=<span class="string">""</span></span><br><span class="line">    android:bottom=<span class="string">""</span></span><br><span class="line">    android:left=<span class="string">""</span></span><br><span class="line">    android:right=<span class="string">""</span>/&gt;</span><br><span class="line">&lt;/transition&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>InsetDrawable：它可以将其他Drawable内嵌到自己当中，并可以在四周流出一定的间距，对应”inset”标签。当一个View希望自己的背景比自己实际的区域小时，可以采用此效果</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;inset xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span><br><span class="line">&lt;inset</span><br><span class="line">    android:drawable=<span class="string">""</span></span><br><span class="line">    android:insetTop=<span class="string">""</span></span><br><span class="line">    android:insetBottom=<span class="string">""</span></span><br><span class="line">    android:insetLeft=<span class="string">""</span></span><br><span class="line">    android:insetRight=<span class="string">""</span></span><br><span class="line">    android:visible=<span class="string">""</span></span><br><span class="line">    /&gt;</span><br><span class="line">&lt;/inset&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>insetTop、insetBottom、insetLeft、insetRight分别表示顶部、底部、左边、右边的内凹的大小</p>
+</li>
+</ul>
+</li>
+<li><p>ScaleDrawable：根据自己的等级将指定的Drawable缩放一定比例</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;scale xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:drawable=<span class="string">""</span></span><br><span class="line">      android:scaleGravity=<span class="string">""</span></span><br><span class="line">       android:scaleWidth=<span class="string">""</span></span><br><span class="line">       android:scaleHeight=<span class="string">""</span></span><br><span class="line">       android:level=<span class="string">""</span>&gt;</span><br><span class="line">&lt;/scale&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>scaleGravity：等同一shape的gravity，当图小于容器尺寸时，可对图片进行定位</p>
+</li>
+<li><p>scaleWidth/scaleHeight：分别表示对指定Drawable宽和高的缩放比例</p>
+</li>
+<li><p>level：等级0表示ScaleDrawable不可见</p>
+</li>
+</ul>
+</li>
+<li><p>ClipDrawable：根据自己当前的等级来裁剪另一个Drawable，对应”clip”标签，根据clipOrientation和gravity两属性固态控制裁剪方向</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;clip xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:drawable=<span class="string">""</span></span><br><span class="line">      android:clipOrientation=<span class="string">""</span></span><br><span class="line">      android:gravity=<span class="string">""</span> &gt;</span><br><span class="line"></span><br><span class="line">&lt;/clip&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>clipOrientation：表示裁剪方向</p>
+<ul>
+<li>horizontal：表示水平方向</li>
+<li>vertical：表示竖直方向</li>
+</ul>
+</li>
+<li><p>gravity：需要和clipOrientation一起才能发挥作用，gravity选项可以通过”|”来组合</p>
+<ul>
+<li>top：将内部Drawable放在容器顶部，不改变它的大小，如果为竖直裁剪，则从底部开始裁剪</li>
+<li>bottom：将内部Drawable放在容器底部，不改变它的大小。如果为竖直裁剪，则从顶部开始裁剪</li>
+<li>left（默认）：将内部Drawable放在容器的左边，不改变它的大小。如果为水平裁剪，则从右边开始裁剪</li>
+<li>right：将内部Drawable放在容器的右边，不改变它的大小。如果为水平裁剪，则从左边开始裁剪</li>
+<li>center_vertical：将内部Drawable放在容器中竖直居中，不改变它的大小。如果为竖直裁剪，则从上下同时开始裁剪</li>
+<li>fill_vertical：使内部的Drawable在竖直方向上填充容器，如果我竖直裁剪，则仅当ClipDrawable的等级为0时（为0时不可见），才能有裁剪行为</li>
+<li>center_horizontal：使内部的Drawable在容器中说居中，不改变它的大小。如果为水平裁剪，则从左右两边同时开始裁剪</li>
+<li>fill_horizontal：使内部的Drawable在水平方向上填充容器，如果我水平裁剪，则仅当ClipDrawable的等级为0时（为0时不可见），才能有裁剪行为</li>
+<li>center：使内部的Drawable在水平和竖直方向都居中，不改变它的大小。如果我竖直裁剪，则从上下同时开始裁剪。如果为水平裁剪，则从左右同时开始裁剪</li>
+<li>clip_vertical：附加选项，表示竖直方向的裁剪，</li>
+<li>clip_horizontal：表示水平方向的裁剪</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>##<center>Android 动画</center></p>
+<p>1、View动画：是一种渐进式动画。它通过对场景里的图像不断做图像变换从而产生动画效果。可以通过代码动态创建，也可以通过XML来定义。View动画只会对View的内容做动画，View相对于父控件的实际位置不会发生改变</p>
+<ul>
+<li><p>种类：</p>
+<ul>
+<li>TranslateAnimation：平移动画，对应”translate”标签，</li>
+<li>ScaleAnimation：缩放动画，对应”scale”标签，放大或缩小</li>
+<li>RotateAnimation：旋转动画，对应”rotate”</li>
+<li>AlphaAnimation：透明度动画，对应”alpha”标签，有改变透明度的效果</li>
+</ul>
+</li>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在res的anim目录下创建动画的xml文件</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;set xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">     android:shareInterpolator=<span class="string">""</span>&gt;</span><br><span class="line">    &lt;translate</span><br><span class="line">        android:fromXDelta=<span class="string">""</span></span><br><span class="line">        android:toXDelta=<span class="string">""</span></span><br><span class="line">        android:fromYDelta=<span class="string">""</span></span><br><span class="line">        android:toYDelta=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;scale</span><br><span class="line">        android:fromXScale=<span class="string">""</span></span><br><span class="line">        android:toXScale=<span class="string">""</span></span><br><span class="line">        android:fromYScale=<span class="string">""</span></span><br><span class="line">        android:toYScale=<span class="string">""</span></span><br><span class="line">        android:pivotX=<span class="string">""</span></span><br><span class="line">        android:pivotY=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;rotate</span><br><span class="line">        android:fromDegrees=<span class="string">""</span></span><br><span class="line">        android:toDegrees=<span class="string">""</span></span><br><span class="line">        android:pivotY=<span class="string">""</span></span><br><span class="line">        android:pivotX=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;alpha</span><br><span class="line">        android:fromAlpha=<span class="string">""</span></span><br><span class="line">        android:toAlpha=<span class="string">""</span>/&gt;</span><br><span class="line">&lt;/set&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>“set”标签：对应AnimationSet类，表示一个动画集和，可以包含若干个动画<ul>
+<li>shareInterpolator：表示集合中的动画是否共享同一个插值器，如果不指定则子动画需要单独指定插值器或使用默认值</li>
+</ul>
+</li>
+<li>translate标签：对应TranslateAnimation类。表示平移动画，可以使View在水平或竖直方向上实现平移的滑动效果<ul>
+<li>fromXDelta：表示平移的x坐标的起始值</li>
+<li>toXDelta：表示平移的xx坐标的结束值</li>
+<li>fromYDelta：表示平移的xy坐标的起始值</li>
+<li>toYDelta：表示平移的xy坐标的结束值</li>
+</ul>
+</li>
+<li>scale标签：对应ScaleAnimation类。表示缩放动画，可以使View具有放大或者缩小的动画效果<ul>
+<li>fromXScale：水平方向缩放的起始值</li>
+<li>toXScale：水平方向缩放的结束值</li>
+<li>fromYScale：竖直方向缩放的起始值</li>
+<li>toYScale：竖直方向缩放的起始值</li>
+<li>pivotX：缩放的轴点的x坐标</li>
+<li>privotY：缩放轴点的y轴坐标，如果轴点事View的中心点，则，水平方向的缩放会导致左右两个方向同时缩放，如果轴点为View的左边界，则，View只会想右边进行缩放</li>
+</ul>
+</li>
+<li>rotate标签：调用RotateAnimation。表示旋转动画，可以使View具有旋转的动画效果<ul>
+<li>fromDegrees：旋转的开启角度</li>
+<li>toDegrees：旋转的结束角度</li>
+<li>pivotX：旋转的轴点的X坐标</li>
+<li>pivotY：旋转轴点的Y坐标</li>
+</ul>
+</li>
+<li>alpha标签：调用AlphaAnimation类。表示透明度动画，可以改变View的透明度<ul>
+<li>fromAlpha：表示透明度的起始值</li>
+<li>toAlpha：表示透明度的结束值</li>
+</ul>
+</li>
+<li>共有属性：<ul>
+<li>duration：动画时持续时间</li>
+<li>fillAfter：动画结束后是否停留在结束位置，true表示停留，false相反</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>2、帧动画：通过顺序播放一系列图像从而产生动画效果，因为需要加载大量图片，所以容易引起OOM</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//xml文件</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;animation-list xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:oneshot=<span class="string">"false"</span>&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">""</span> android:duration=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">""</span> android:duration=<span class="string">""</span>/&gt;</span><br><span class="line">&lt;/animation-list&gt;</span><br><span class="line"><span class="comment">//在代码中加载帧动画</span></span><br><span class="line"> 	<span class="comment">//方法一</span></span><br><span class="line">     imageView = (ImageView) findViewById(R.id.imageView);</span><br><span class="line">	imageView.setBackgroundResource(R.drawable.frame_anim);  </span><br><span class="line">     animationDrawable = (AnimationDrawable) imageView.getBackground(); </span><br><span class="line">	animationDrawable.start();</span><br><span class="line">	<span class="comment">//方法二</span></span><br><span class="line">	animationDrawable = (AnimationDrawable) getResources().getDrawable(R.drawable.frame_anim);     imageView.setBackground(animationDrawable);</span><br><span class="line">	animationDrawable.start();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>3、view动画特殊使用场景</p>
+<ul>
+<li><p>LayoutAnimation：作用于ViewGroup，为ViewGroup指定一个动画，则，它所有子元素出场时都会具有此动画效果</p>
+<ul>
+<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在res/anim/目录小创建动画xml文件</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;layoutAnimation xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">       android:delay=<span class="string">""</span> </span><br><span class="line">       android:animationOrder=<span class="string">""</span></span><br><span class="line">       android:interpolator=<span class="string">""</span></span><br><span class="line">       android:animation=<span class="string">""</span>&gt;</span><br><span class="line">&lt;/layoutAnimation&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>delay：表示子元素开始动画的延迟时间，如，子元素入场动画时间周期为300ms，则，0.5表示每个子元素都需要延迟150ms才播放入场动画</li>
+<li>animationOrder：表示子元素动画的顺序<ul>
+<li>normal：表示顺序显示，即前面的子元素开始播放入场动画</li>
+<li>reverse：表示逆向显示，即后面的子元素先开始播放动画</li>
+<li>random：随机播放入场动画</li>
+</ul>
+</li>
+<li>animation：为子元素指定具体的入场动画</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Activity的切换效果</p>
+<ul>
+<li><p>要自定义Activity的切换效果，主要用到overridePendingTransition(int enterAnim，int exitAnim)方法，此方法需要在startActivity(intent)或finish()之后调用才有效</p>
+<ul>
+<li><p>enterAnim：新的Activity被打开时，所需要的动画资源id</p>
+</li>
+<li><p>exitAnim：当前Activity消失时，所需要的动画资源id</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Activity入场动画</span></span><br><span class="line"> Intent animIntent = <span class="keyword">new</span> Intent();</span><br><span class="line">    startActivity(animIntent);</span><br><span class="line">    overridePendingTransition(R.id.enter_anim,R.id.exit_anim);</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>4、属动画：通过动态改变对象的属性从而产生动画效果，在API 11新加入的特性。它要求作用对象提供相应的get和set方法，它会根据你传递的该属性初始值和最终值，以多次调用set方法设置该对象的属性，从而实现动画效果</p>
+<ul>
+<li><p>改变一个对象的translationX属性，使它沿x轴平移一段距离</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ObjectAnimator.ofFloat(imageView,<span class="string">"translationX"</span>,-<span class="number">100</span>).start();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>改变一个对象的背景颜色属性。</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ObjectAnimator bGColorAnim = ObjectAnimator.ofInt(button, <span class="string">"backgroundColor"</span>, <span class="number">0xFFFF8080</span>, <span class="number">0xFF8080FF</span>);</span><br><span class="line">       <span class="comment">//设置执行时间</span></span><br><span class="line">       bGColorAnim.setDuration(<span class="number">2000</span>);</span><br><span class="line">       <span class="comment">//设置估值器</span></span><br><span class="line">       bGColorAnim.setEvaluator(<span class="keyword">new</span> ArgbEvaluator());</span><br><span class="line">       <span class="comment">//设置重复次数，默认值诶0，其中-1表示无限循环</span></span><br><span class="line">       bGColorAnim.setRepeatCount(ValueAnimator.INFINITE);</span><br><span class="line">       <span class="comment">//设置重复类型：repeat表示连续重复；reverse表示逆向重复</span></span><br><span class="line">       bGColorAnim.setRepeatMode(ValueAnimator.REVERSE);</span><br><span class="line">       bGColorAnim.start();</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>插值器和估值器 </p>
+</li>
+<li><p>属性动画监听</p>
+<ul>
+<li>AnimatorUpDateListener<ul>
+<li>onAnimationUpdate(ValueAnimator animation)：监听这个动画过程。动画是由许多帧组成的，每播放一帧，此方法都会被调用一次</li>
+</ul>
+</li>
+<li>AnimatorListener<ul>
+<li>onAnimationStart(Animator anim)：动画开始时此方法会调用</li>
+<li>onAnimationEnd(Animator anim)：动画结束后调用</li>
+<li>onAnimationCancel(Animator anim)：动画取消时调用</li>
+<li>onAnimationRepeat(Animator anim)：动画重复时调用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>属性动画要求动画作用对象提供该属性的get和set方法，否则，动画无法生效</p>
+<ul>
+<li><p>解决方式</p>
+<ul>
+<li><p>如果你有权限，则，给你的对象加上get和set方法</p>
+</li>
+<li><p>用一个类包装原始对象，间接为其提供get和set方法</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//包装类</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewWrapper</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> View view;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ViewWrapper</span><span class="params">(View view)</span> </span>&#123;<span class="keyword">this</span>.view = view;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getWidth</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> view.getLayoutParams().width;&#125;</span><br><span class="line">    </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setWidth</span><span class="params">(<span class="keyword">int</span> width)</span></span>&#123;</span><br><span class="line">      view.getLayoutParams().width = width;</span><br><span class="line">      view.requestLayout();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用方法</span></span><br><span class="line">	ViewWrapper buttonWrapper = <span class="keyword">new</span> ViewWrapper(button);</span><br><span class="line">     ObjectAnimator.ofInt(buttonWrapper,<span class="string">"width"</span>,<span class="number">500</span>).setDuration(<span class="number">300</span>).start();</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>采用ValueAnimator监听动画过程，自己实现属性改变</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>动画的注意事项：</p>
+<ul>
+<li>OOM问题：当帧动画中的图片数量多且较大时，容易出现OOM，应尽量避免使用帧动画</li>
+<li>内存泄漏：在无限循环执行动画时，当Activity退出时需要及时停止，否则，会导致内存泄漏（View动画不会存在此问题）</li>
+<li>View动画问题：View动画只是对View的影像做动画，并不是真正改变View的转态</li>
+<li>不要使用px：在动画执行过程中尽量使用dp，使用px会导致在不同设备上有不同的效果</li>
+<li>动画元素的交互：在3.0以前的系统上，不管是View动画还是属性动画，新位置均无法除非点击事件，只能在老位置触发点击事件。3.0之后，使用属性动画可以在移动后的位置触发点击事件，使用View动画仍然只能在老位置触发点击事件</li>
+</ul>
+</li>
+</ul>
+<h2 id="Window和WindowManager"><a href="#Window和WindowManager" class="headerlink" title="Window和WindowManager"></a><center>Window和WindowManager</center></h2><p>1、Window：表示一个窗口，具体实现类时PhoneWindow，Android中所有的视图都是通过Window来展示的，它实际上是View的直接管理者。每一个Window都对应一个View和一个ViewRootImpl，Window和View通过ViewRootImpl建立联系的</p>
+<ul>
+<li><p>使用WindowManager添加Window</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);</span><br><span class="line">    Button button = <span class="keyword">new</span> Button(<span class="keyword">this</span>);</span><br><span class="line">    button.setText(<span class="string">"Window"</span>);</span><br><span class="line">    LayoutParams layoutParams = <span class="keyword">new</span> LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, <span class="number">0</span>, <span class="number">0</span>, PixelFormat.TRANSPARENT);</span><br><span class="line">    layoutParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_SHOW_WHEN_LOCKED;</span><br><span class="line">    layoutParams.gravity = Gravity.LEFT | Gravity.TOP;</span><br><span class="line">    layoutParams.x = <span class="number">100</span>;</span><br><span class="line">    layoutParams.y = <span class="number">100</span>;</span><br><span class="line">    manager.addView(button, layoutParams);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>常用flags参数：表示Window的属性</p>
+<ul>
+<li>FLAG_NOT_FOCUSALE：表示Window不需要获取焦点及接收各种输入事件，此标记会同时启用FLAG_NOT_TOUCH_MODAL，最终，事件会直接传递给下层具有焦点的Window</li>
+<li>FLAG_NOT_TOUCH_MODAL：此模式下，系统会将当前Window区域之外的点单击事件传递给底层Window，当前Window区域内的单击事件自己处理，一般需要开启此标志，否则，其他Window无法收到单击事件</li>
+<li>FLAG_SHOW_WHEN_LOCKED：开启此模式可以让Window显示在锁屏界面上</li>
+</ul>
+</li>
+<li><p>Type参数：表示Window的类型</p>
+<ul>
+<li>应用Window：对应一个Activity</li>
+<li>子Window：不能单独存在，它需要附属特定的符Window之中，如：Dialog</li>
+<li>系统Window：需要在声明权限才能创建，如状态栏、Toast</li>
+</ul>
+</li>
+<li><p>Window的层级，每个WIndow都有对应的z-ordered，层级大的会覆盖在层级小的Window上面</p>
+<ul>
+<li>应用Window层级范围是：1~99</li>
+<li>子Window层级范围是：1000~1999</li>
+<li>系统Window层级范围是：2000~2999</li>
+<li>如果想要Window位于使用Window的最顶层，我们使用系统Window，选用TYPE_SYSTEM_OVERLAY或者TYPE_SYSTEM_ERROR这两个其中一个类型为type类型即可</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>2、WindowManager：它继承ViewManager</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ViewManager</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addView</span><span class="params">(View view, ViewGroup.LayoutParams params)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateViewLayout</span><span class="params">(View view, ViewGroup.LayoutParams params)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeView</span><span class="params">(View view)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>addView：添加View</li>
+<li>updateViewLayout 更新View</li>
+<li>removeView：删除View</li>
+</ul>
+</li>
+</ul>
+<p>##<center>Android的消息机制<a href="/2018/05/06/Code/" title="自己选择的路，哭着也要走完">自己选择的路，哭着也要走完</a></center></p>
 <p>10、</p>
 
       
@@ -812,7 +1189,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Window和WindowManager"><span class="toc-number">5.</span> <span class="toc-text">Window和WindowManager</span></a></li></ol>
                     </div>
                 </span>
             </div>
