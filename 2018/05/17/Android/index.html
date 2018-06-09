@@ -17,7 +17,7 @@
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/05/17/Android/view-绘制.png">
-<meta property="og:updated_time" content="2018-05-28T14:09:33.187Z">
+<meta property="og:updated_time" content="2018-06-04T23:50:12.965Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android">
 <meta name="twitter:description" content="Android 开发">
@@ -174,7 +174,7 @@
 	<div id="toc-article" class="toc-article">
 	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
 		<strong class="toc-title">文章目录</strong>
-           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Window和WindowManager"><span class="toc-number">5.</span> <span class="toc-text">Window和WindowManager</span></a></li></ol>
+           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Window和WindowManager"><span class="toc-number">5.</span> <span class="toc-text">Window和WindowManager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程及线程池"><span class="toc-number">6.</span> <span class="toc-text">线程及线程池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bitmap加载和缓存"><span class="toc-number">7.</span> <span class="toc-text">Bitmap加载和缓存</span></a></li></ol>
          </div>
    <script type="text/javascript">
 	function showToc(){
@@ -571,7 +571,10 @@
 <li>disPatchTouchEvent(MotionEvent ev)：用来进行事件发放，如果事件能够传递给当前View，此方法一定会被调用</li>
 <li>onInterceptTouchEvent(MotionEvent event)：用来判断是否拦截某个事件，如果当前View拦截了某个事件，则同一事件序列中此方法不再次调用</li>
 <li>onTouchEvent(MotionEvent event)：用来处理点击事件，返回True代表消耗事件，false代表不消耗</li>
+<li>事件传递流程：<ul>
 <li>对ViewGroup来说，点击事件发生后，首先传递给当前ViewGroup，当前View的dispathTouchEvent方法会被调用，如果此ViewGroup的onInterceptTouchEvent方法返回true，则代表要拦截此事件，就把事件交给此ViewGroup的onTouchEvent方法处理，如果此ViewGoup的onInterceptTouchEvent方法返回false就表示不拦截当前事件，当前事件就会传递给它的子元素，然后子元素的dispatchTouchEvent方法就会被调用，以此类推，知道事件被最终处理</li>
+</ul>
+</li>
 <li>onTouchListener优先级比onTouchEvent高</li>
 <li>事件传递过程顺序：Activity-&gt;Window-&gt;View,如果一个View的onTouchEvent返回false，则此View的父容器的onTouchEvent方法将会调用，如果所有元素都不处理此事件，则此事件最终会传递给Activity出路</li>
 <li>结论：<ul>
@@ -785,7 +788,7 @@
 </li>
 </ul>
 </li>
-<li><p>StateListDrawable：表示Drawable集和，每个Drawable都对应View的一种转态，系统会根据View的转态选择合适的Drawable。对应”selector”标签</p>
+<li><p>StateListDrawable：表示Drawable集合，每个Drawable都对应View的一种转态，系统会根据View的转态选择合适的Drawable。对应”selector”标签</p>
 <ul>
 <li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;selector xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    android:constantSize=<span class="string">"[true|false]"</span></span><br><span class="line">          android:dither=<span class="string">"[true|false]"</span></span><br><span class="line">          android:variablePadding=<span class="string">"[true|false]"</span>&gt;</span><br><span class="line">    &lt;item android:drawable=<span class="string">""</span></span><br><span class="line">          android:state_pressed=<span class="string">""</span></span><br><span class="line">          android:state_focused=<span class="string">""</span></span><br><span class="line">          android:state_hovered=<span class="string">""</span></span><br><span class="line">          android:state_selected=<span class="string">""</span></span><br><span class="line">          android:state_enabled=<span class="string">""</span></span><br><span class="line">          android:state_checkable=<span class="string">""</span></span><br><span class="line">          android:state_checked=<span class="string">""</span></span><br><span class="line">          android:state_activated=<span class="string">""</span></span><br><span class="line">          android:state_window_focused=<span class="string">""</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/selector&gt;</span><br></pre></td></tr></table></figure>
 </li>
@@ -881,7 +884,7 @@
 </li>
 <li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在res的anim目录下创建动画的xml文件</span></span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</span><br><span class="line">&lt;set xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">     android:shareInterpolator=<span class="string">""</span>&gt;</span><br><span class="line">    &lt;translate</span><br><span class="line">        android:fromXDelta=<span class="string">""</span></span><br><span class="line">        android:toXDelta=<span class="string">""</span></span><br><span class="line">        android:fromYDelta=<span class="string">""</span></span><br><span class="line">        android:toYDelta=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;scale</span><br><span class="line">        android:fromXScale=<span class="string">""</span></span><br><span class="line">        android:toXScale=<span class="string">""</span></span><br><span class="line">        android:fromYScale=<span class="string">""</span></span><br><span class="line">        android:toYScale=<span class="string">""</span></span><br><span class="line">        android:pivotX=<span class="string">""</span></span><br><span class="line">        android:pivotY=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;rotate</span><br><span class="line">        android:fromDegrees=<span class="string">""</span></span><br><span class="line">        android:toDegrees=<span class="string">""</span></span><br><span class="line">        android:pivotY=<span class="string">""</span></span><br><span class="line">        android:pivotX=<span class="string">""</span>/&gt;</span><br><span class="line">    &lt;alpha</span><br><span class="line">        android:fromAlpha=<span class="string">""</span></span><br><span class="line">        android:toAlpha=<span class="string">""</span>/&gt;</span><br><span class="line">&lt;/set&gt;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>“set”标签：对应AnimationSet类，表示一个动画集和，可以包含若干个动画<ul>
+<li>“set”标签：对应AnimationSet类，表示一个动画集合，可以包含若干个动画<ul>
 <li>shareInterpolator：表示集合中的动画是否共享同一个插值器，如果不指定则子动画需要单独指定插值器或使用默认值</li>
 </ul>
 </li>
@@ -1063,6 +1066,201 @@
 </li>
 </ul>
 <p>##<center><a href="/2018/05/28/Android的消息机制/" title="Android的消息机制">Android的消息机制</a></center></p>
+<h2 id="线程及线程池"><a href="#线程及线程池" class="headerlink" title="线程及线程池"></a><center>线程及线程池</center></h2><p>1、线程：操作系统调度的最小单元，也是一种受限的系统资源。它的创建刻销毁都会有相应的开销 ，因此，它不可能无限制地产生。系统是通过时间片轮转的方式调用每个线程</p>
+<ul>
+<li>主线程：主要作用是运行四大组件及处理界面相关的事情</li>
+<li>子线程：用于执行耗时任务，如，网络请求、I/O操作</li>
+</ul>
+<p>2、线程的形态：</p>
+<ul>
+<li><p>AsyncTask：一种轻量级的异步任务类。在线程池中执行后台任务，然后把执行进度及最终结果传递给主线程并在主线程更新UI，</p>
+<ul>
+<li>不适合特表耗时的后台任务，对于特别耗时任务建议使用线程池</li>
+<li>AsyncTask的三个参数（如果3个参数没有被使用可以用Void 代替）<ul>
+<li>Params：表示启动任务执行的输入参数</li>
+<li>Progress：表示后台任务的执行进度</li>
+<li>Result：表示后台任务的返回结果类型</li>
+</ul>
+</li>
+<li>五个方法：<ul>
+<li>doPreExecute（）：在主线程中执行。在execute方法被调用之后立即执行此方法。此方法在异步任务执行之前被调用，一般用于做一些准备工作</li>
+<li>doInBackground(Params …params)：在线程池中执行。用于执行异步任务，params表示异步任务输入参数，在此方法中，可以通过publishProgress()方法更新任务的进度，publicProgress方法会调用onProgressUpdate方法。另，，此方法需要返回执行结果给onPostExecute()方法</li>
+<li>onProgressUpdate(Progress…values)：在主线程执行，当后台任务进度发生改变时被调用。values参数是任务进度。</li>
+<li>onPostExecute(Result…result)：在主线程执行。在异步任务执行后，此方法会被调用。result参数是后台任务的返回值</li>
+<li>onCancelld()：在主线程执行。当异步任务被取消时此方法会被调用</li>
+</ul>
+</li>
+<li>注意事项：<ul>
+<li>AsyncTask的对象必须在主线程中创建</li>
+<li>execute方法必须在UI线程调用</li>
+<li>不要在程序中直接调用onPreExecute()、onPostExecute()、doInBackground()、及ressUpdate()方法</li>
+<li>一个AsyncTask对象只能执行一次，即只能调用一次execute方法，否则报运行时异常</li>
+<li>在1.6之后AsyncTask采用线程池处理并行任务。从Android3.0开始，为了避免AsyncTask所带来的并发错误，AsyncTask采用一个线程来串行执行任务。当然，在Android1.6后续版本中我们可以通过executeOnExecutor方法来并行执行任务</li>
+<li>AsyncTask内部的任务队列容量为128，如果正在执行的工作任务超过此数，就会抛出运行时异常</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>HandlerThread：</p>
+<ul>
+<li><p>本质上是一个线程类，它继承了Thread</p>
+</li>
+<li><p>它在run方法中创建了Looper对象，并调用的Looper.looper()方法，所以它可以进行looper循环</p>
+</li>
+<li><p>通过传递在HandlerThread获取的looper对象给Handler，使得它可以在handleMessage方法中执行异步任务</p>
+</li>
+<li><p>创建HandlerThread后必须先调用它的start()方法</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//HandlerThread 使用示例</span></span><br><span class="line">	<span class="comment">//创建UI线程Handler，接收HandlerThread执行的结果</span></span><br><span class="line">	 mMainHandler = <span class="keyword">new</span> Handler()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">                <span class="comment">//...do something</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		<span class="comment">//HandlerThread使用</span></span><br><span class="line">        HandlerThread handlerThread = <span class="keyword">new</span> HandlerThread(<span class="string">"doSomething"</span>);</span><br><span class="line">        handlerThread.start();</span><br><span class="line">		<span class="comment">//使用HandlerThread的Looper创建子Handler，执行耗时任务，并把结果返回到主线程的Handler</span></span><br><span class="line">        Handler handler = <span class="keyword">new</span> Handler(handlerThread.getLooper(), <span class="keyword">new</span> somethingCallBack());</span><br><span class="line">        handler.sendMessage(<span class="keyword">new</span> Message());</span><br><span class="line">	</span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">somethingCallBack</span>  <span class="keyword">implements</span> <span class="title">Handler</span>.<span class="title">Callback</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//...do something</span></span><br><span class="line">            <span class="comment">//将执行结果发送到主线程</span></span><br><span class="line">            mMainHandler.sendMessage(<span class="keyword">new</span> Message());</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>IntentService：一种特殊的service，它继承了Service并且是一个抽象类，所以要创建它的子类才能使用IntentService</p>
+<ul>
+<li>用于执行后台耗时任务</li>
+<li>任务执行完成后它会自动停止</li>
+<li>因为是一个服务，优先级比单纯的线程高，不容易被系统杀死</li>
+<li>IntentService封装了HandlerThread和Handler</li>
+<li>任务执行完成后它会调用stopSelf(int startId)尝试停止任务，它在尝试停止任务之前会判断最近启动服务的次数是否和startId相等，如果相等则停止服务，不同，则不停止服务。而stopSelf()方法会立即停止任务，而此时可能还有其他消息未处理。</li>
+<li>IntentService是顺序执行后台任务的</li>
+</ul>
+</li>
+</ul>
+<p>2、线程池：一个线程池会缓存一定数量的线程池，当有任务时，就从线程池中获取一个线程执行任务。通过线程池可以避免频繁创建和销毁线程所带来的系统开销</p>
+<ul>
+<li><p>线程池优点：</p>
+<ul>
+<li>重用线程池中的线程，避免因为线程的创建和销毁所带来的性能开销</li>
+<li>有效控制线程池的最大并发数，避免大量线程之间因互相抢占系统资源而导致的阻塞现象</li>
+<li>能够对现场进行简单的管理，并提供定时执行及指定间隔循环执行</li>
+</ul>
+</li>
+<li><p>ThreadPoolExecutor：通过不同参数可以参加不同的线程池</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构造方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                              ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                              RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>codePoolSize：线程池核心线程数<ul>
+<li>默认情况下核心线程回馈一直存活，即使它们处于闲置转态</li>
+<li>可以将ThreadPoolExecutor的allowCoreThreadTimeOut属性设置为true，让闲置的核心线程有超时策略</li>
+<li>这个超时策略时间由keepAliveTime指定，当核心线程等待时间超过keepAliveTime所指定的时长后，核心线程就会停止</li>
+</ul>
+</li>
+<li>maximumPoolSize：线程池所能容纳的最大线程数，当活动线程数达到此数值后，新的任务将会被阻塞</li>
+<li>keepAliveTime：非核心线程闲置时的超时时长。超过此时长，非核心线程就会被回收。如果ThreadPoolExecutor的allowCoreThreadTimeOut属性为true时，keepAliveTime也会作用于核心线程</li>
+<li>unit：用于指定keepAliveTime参数的时间单位，它是一个枚举，常用有TimeUnit.MILLISECONDS(毫秒)、TimeUnit.SECONDS(秒)、TimeUnit.MINUTES(分钟)</li>
+<li>workQueue：线程池的任务队列，通过线程池的execute方法提交的Runnable对象会存储在这个队列中</li>
+<li>ThreadFactory：线程工厂，为线程池提供创建新线程的功能。它是一个接口，只有一个newThread(Runnable r)方法</li>
+<li>RejectedExecutionHandler：当线程池无法执行新任务时（任务队列已满或无法成功执行任务），此参数会调用rejectedExecution()方法通知调用者(默认情况会直接抛出一个RejectedExecutionException)。有四个可选值<ul>
+<li>CallerRunsPolicy：</li>
+<li>AbortPolicy：默认值，它会直接抛出RejectedExecutionException</li>
+<li>DiscardPolicy：</li>
+<li>DiscardOldPolicy：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ThreadPoolExecutor执行流程</p>
+<ul>
+<li>如果线程池中的线程数量未达到核心线程的数量，就会直接启动一个核心线程执行任务</li>
+<li>如果线程池中的线程数量已经达到或者超过核心线程数量，则，任务会被插入到任务队列中等待执行</li>
+<li>如果无法将任务插入到任务队列（任务队列已满），此时，如果线程数量未达到线程池规定的最大值，则会立刻启动一个非核心线程执行任务</li>
+<li>如果线程数量已达到线程池规定的最大值，就会拒绝执行此任务。ThreadPoolExecutor会调用RejectedExecutionHandler的rejectedExecution()方法通知调用者</li>
+</ul>
+</li>
+<li><p>线程池分类</p>
+<ul>
+<li>FixedThreadPool：通过Executors的newFixedThreadPool()方法创建<ul>
+<li>它是一种线程数量固定的线程池</li>
+<li>当线程处于空闲状态是，线程不会被回收</li>
+<li>当所有线程都处于活动状态时，新任务会处于等待状态，直到有线程空闲出来</li>
+<li>只有核心线程，且核心线程不会被回收，所以它能更快的响应外界请求</li>
+<li>核心线程没有超时机制及任务队列也没有大小限制</li>
+</ul>
+</li>
+<li>CachedThreadPool：通过Executors的newCachedThreadPool()方法创建<ul>
+<li>它是一种线程数量不固定的线程池</li>
+<li>只有非核心线程，且最大线程数为Integer.MAX_VALUE</li>
+<li>当线程池中的线程都处于活动状态时，线程池会创建新的线程处理新的任务，否则，就会使用空闲的线程处理新的任务</li>
+<li>线程池中的空闲线程都有超时机制，超时时间为60秒，超过60秒空闲线程就会被回收</li>
+<li>此线程池的任务队列相当于一个空集合，每个任务都会立即被执行</li>
+<li>此类线程池适合执行大量耗时较少的任务，当整个线程池都处于空闲状态时，线程池所有的线程都会因超时而被停止，此时，此线程池中实际上没有任何线程，所以它几乎不占用任何系统资源</li>
+</ul>
+</li>
+<li>ScheduledThreadPool：通过Executors的newScheduleThreadPool()方法创建<ul>
+<li>它的核心线程数量固定，非核心线程数没有限制</li>
+<li>当非核心线程空闲时就立即被回收</li>
+<li>此类线程池主要用于执行定时任务和具有固定周期的重复任务</li>
+</ul>
+</li>
+<li>SingleThreadExecutor：通过Executors的newSingleThreadExecutor()方法创建<ul>
+<li>内部只有一个核心线程，它确保所有的任务都在同一个线程按顺序执行</li>
+<li>意义在于统一所有的外界任务到同一个线程中，使得任务之间不需要处理线程同步问题</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Bitmap加载和缓存"><a href="#Bitmap加载和缓存" class="headerlink" title="Bitmap加载和缓存"></a><cetner>Bitmap加载和缓存</cetner></h2><p>  1、高效加载Bitmap</p>
+<ul>
+<li><p>bitmap：在Android中指一张图片，BitmapFactory类提供了四种方法加载Bitmap</p>
+<ul>
+<li>decodeFile：从系统文件加载Bitmap</li>
+<li>decodeResource：从Android资源中加载Bitmap</li>
+<li>decodeStream：从输入流中加载Bitmap</li>
+<li>decodeByteArray：从字节数组中加载Bitmap</li>
+</ul>
+</li>
+<li><p>高效加载Bitmap</p>
+<ul>
+<li>根据展示图片的控件大小使用BitmapFactory.Options对图片进行缩放，这样就会降低内存占用</li>
+<li>缩放主要用到BitmapFactory.Options的imSampleSize参数（采样率），只有采样率大于1的整数图片才有缩放效果</li>
+</ul>
+</li>
+<li><p>缩放图片流程</p>
+<ul>
+<li><p>将BitmapFactory.Options的inJustDecodeBounds参数设为true并加载图片，当inJustDecodeBounds为true时，BitmapFactory只会解析图片的原始宽高</p>
+</li>
+<li><p>从BitmapFactory.Options中获取图片的原始宽高消息</p>
+</li>
+<li><p>根据采样率规则和目标View大小计算出采样率inSampliSize</p>
+</li>
+<li><p>将BitmapFactory.Options的inJustDecodeBounds参数设置为false，然后重新加载图片</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//缩放图片代码</span></span><br><span class="line">        BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();</span><br><span class="line">		<span class="comment">//此参数为true时，只解析图片宽高</span></span><br><span class="line">        options.inJustDecodeBounds = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        BitmapFactory.decodeResource(res, resId, options);</span><br><span class="line">		<span class="comment">//根据图片宽高和目标控件宽高计算采样率</span></span><br><span class="line">        options.inSampleSize = calcSampleSize(options, width, height);</span><br><span class="line">		<span class="comment">//根据采样率完全解析图片</span></span><br><span class="line">        options.inJustDecodeBounds = <span class="keyword">false</span>;</span><br><span class="line">        Bitmap bitmap = BitmapFactory.decodeResource(res, resId, options);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//计算采样率</span></span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">calcSampleSize</span><span class="params">(BitmapFactory.Options options, <span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> outWidth = options.outWidth;</span><br><span class="line">        <span class="keyword">int</span> outHeight = options.outHeight;</span><br><span class="line">        <span class="keyword">int</span> sampleSize = <span class="number">1</span>;</span><br><span class="line">     <span class="comment">//如果图片宽高，大于目标控件宽高，则改变采样率</span></span><br><span class="line">        <span class="keyword">if</span> (outHeight &gt; height || outWidth &gt; width) &#123;</span><br><span class="line">            <span class="keyword">int</span> halfWidth = outWidth / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">int</span> halfHeight = outHeight / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">while</span> (halfWidth / sampleSize &gt;= width &amp;&amp; halfHeight / sampleSize &gt;= height) &#123;</span><br><span class="line">                sampleSize *= <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sampleSize;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2、Android缓存策略</p>
+</li>
+<li><p>缓存策略：</p>
+<ul>
+<li>添加缓存，获取缓存，删除缓存</li>
+</ul>
+</li>
+<li><p>LRU：最近最少使用算法，当缓存满时，会优先淘汰那些近期最少使用的缓存对象</p>
+<ul>
+<li><p>LruCache：用于内存缓存</p>
+<ul>
+<li><p>内部采用一个LinkedHashMap以强引用的方式存储外界的存储对象</p>
+</li>
+<li><p>提供get()和put()方法完成缓存的获取和添加操作</p>
+</li>
+<li><p>当内存满时，会移除较早使用的缓存对象，让后再添加新的缓存</p>
+</li>
+<li><p>LruCache是线程安全的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//LruCache</span></span><br><span class="line">	 	<span class="keyword">int</span> maxMemory = (<span class="keyword">int</span>) (Runtime.getRuntime().maxMemory() / <span class="number">1024</span>);</span><br><span class="line">        <span class="keyword">int</span> cacheMemory = maxMemory/<span class="number">8</span>;</span><br><span class="line">        <span class="comment">//LruCache使用</span></span><br><span class="line">        LruCache&lt;String, Bitmap&gt; lruCache = <span class="keyword">new</span> LruCache&lt;String, Bitmap&gt;(cacheMemory)&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">sizeOf</span><span class="params">(String key, Bitmap value)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> bitmap.getRowBytes()*bitmap.getHeight()/<span class="number">1024</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//获取缓存对象方法</span></span><br><span class="line">	 lruCache.get(key);</span><br><span class="line">	<span class="comment">//添加缓存对象方法</span></span><br><span class="line">	lruCache.put(key,lruBitmap);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>- DiskLruCache：用于存储设备缓存（磁盘缓存），它通过将缓存对象写入文件系统从而实现缓存的效果
+</code></pre><p>  10</p>
+<ul>
+<li></li>
+</ul>
 
       
 
@@ -1195,7 +1393,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Window和WindowManager"><span class="toc-number">5.</span> <span class="toc-text">Window和WindowManager</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Activity相关"><span class="toc-number">1.</span> <span class="toc-text">Activity相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IPC机制"><span class="toc-number">2.</span> <span class="toc-text">IPC机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Android中的-View"><span class="toc-number">3.</span> <span class="toc-text">Android中的 View</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteViews"><span class="toc-number">4.</span> <span class="toc-text">RemoteViews</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Window和WindowManager"><span class="toc-number">5.</span> <span class="toc-text">Window和WindowManager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程及线程池"><span class="toc-number">6.</span> <span class="toc-text">线程及线程池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bitmap加载和缓存"><span class="toc-number">7.</span> <span class="toc-text">Bitmap加载和缓存</span></a></li></ol>
                     </div>
                 </span>
             </div>

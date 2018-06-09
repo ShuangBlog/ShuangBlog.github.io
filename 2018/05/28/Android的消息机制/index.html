@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-28T14:10:29.310Z">
+<meta property="og:updated_time" content="2018-05-28T23:15:40.340Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android的消息机制">
 <meta name="twitter:description" content="Android 开发">
@@ -170,10 +170,62 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1、Handler是Android消息机制的上层接口，所以开发中只需要和Handler交互即可。Android的消息机制主要指Handler的运行机制。Handler的运行需要MessageQueue和Looper的支持</p>
+        <p>#<center>Android 消息机制</center></p>
+<p>1、Android的消息机制主要指Handler的运行机制。Handler的运行需要MessageQueue和Looper的支持，Handler会采用当前线程的Looper来构造循环系统</p>
 <ul>
-<li>MessageQueue：消息队列</li>
-<li>Looper：</li>
+<li><p>ThreadLocal：它不是线程，但，它可以在指定的线程中存储数据，数据存储之后只有指定的线程可以获取到存储的数据</p>
+<ul>
+<li><p>如果数据以线程为作用域并且不同线程具有不同的数据副本时，可以考虑用ThreadLocl</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ThreadLocal local = <span class="keyword">new</span> ThreadLocal();</span><br><span class="line">       local.set(<span class="number">1</span>);</span><br><span class="line">       <span class="keyword">int</span> value = (<span class="keyword">int</span>) local.get();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Handler是Android消息机制的上层接口</p>
+<ul>
+<li>主要包含发送和处理消息的过程<ul>
+<li>发送消息：Handler通过send和post方式将消息或者Runnable对象放入Handler内部的Looper中，Looper会调用MessageQueue的enqueueMessage方法将此消息放入消息队列</li>
+<li>处理消息：通过callBack的handleMessage方法处理消息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>MessageQueue：消息队列。内部采用单链表的数据结构来存储消息列表，主要包含插入和读取两个操作</p>
+<ul>
+<li>插入：调用enqueueMessage()方法进行插入，此方法作用是往消息队列中插入一条消息</li>
+<li>读取：调用next（）方法进行读取。此方法从消息队列中取出一条消息并将其从消息队列中移除</li>
+</ul>
+</li>
+<li><p>Looper：消息循环。运行在创建Handler所在的线程中。它会以无限循环的形式去查找是否有新消息，如果有就马上处理消息，否则，就一直等待。在ActivityThread（）被创建时，就会自动初始化Looper，其他线程则需要自己创建</p>
+<ul>
+<li>使用Looper.perpare（）方法创建Looper</li>
+<li>使用Looper.loop()开启消息循环</li>
+<li>在Looper的构造方法中会创建一个MessageQueue，然后将当前线程的对象保存起来</li>
+<li>使用quit()方法或quitSafely()方法退出一个Looper<ul>
+<li>quit：直接退出Looper</li>
+<li>quitSafely：设定一个退出标志，然后等消息队列中的已有消息处理完毕后才安全退出</li>
+</ul>
+</li>
+<li>使用getMainLooper()方法可以在任何地方获取到主线程的Looper。</li>
+<li>如在子线程手动创建了Looper，则，在使用事情完成后要调用quit方法来终止消息循环，否则线程会一直等待</li>
+<li>在Looper.looper()方法中，如果有消息，就会使用发生此条消息的Handler对象的dispatchMessage()方法处理消息</li>
+</ul>
+</li>
+<li></li>
+<li><p>延伸问题</p>
+<ul>
+<li>为什么系统不允许子线程更新UI？<ul>
+<li>Android的UI控件不是安全的，如果在多线程中访问可能会导致UI控件处于崩溃预期的转态。如果给UI控件加锁，就会让UI访问的逻辑变复杂，以及锁机制会降低UI访问的效率（锁机制会阻塞某些线程的执行）。</li>
+</ul>
+</li>
+<li>UI检查在哪里进行<ul>
+<li>Android在ViewRootImpl的checkThread方法中对UI操作做验证</li>
+<li>ViewRootImpl是在onResume方法中初始化的。</li>
+<li>如果在onResume方法之前在子线程更新UI是不会报异常的。</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
       
@@ -268,6 +320,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/06/04/Android-二/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Android--二
+        
+      </div>
+    </a>
   
   
     <a href="/2018/05/17/Android/" id="article-nav-older" class="article-nav-link-wrap">
