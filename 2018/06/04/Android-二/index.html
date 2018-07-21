@@ -17,7 +17,9 @@
 <meta property="og:description" content="Android 开发">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/06/04/Android-二/Android.png">
-<meta property="og:updated_time" content="2018-06-09T02:13:12.209Z">
+<meta property="og:image" content="http://yoursite.com/2018/06/04/Android-二/matrix.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/04/Android-二/shader_mode.png">
+<meta property="og:updated_time" content="2018-07-21T01:29:49.886Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android--二">
 <meta name="twitter:description" content="Android 开发">
@@ -199,7 +201,7 @@
         <p>##<center>Android 系统架构</center></p>
 <p>1、Android系统架构</p>
 <p><img src="/2018/06/04/Android-二/Android.png" alt=""></p>
-<p>Android由上到下分为四层，分别是应用程序层（Application），应用程序框架层（Application Framework），系统运行时库层（Libraries和Android Runtime）以及Linux层（Linux Kernel）</p>
+<p>Android由上到下分为四层，分别是应用程序层（Application），应用程序框架层（Application Framework），系统运行时库层（Libraries和Android Runtime）以及Linux层（Linux Kernel）<a id="more"></a></p>
 <ul>
 <li>应用程序层：此层提供的服务就是我们常说的应用，它是直接与用户交互的。如，日历，联系人，短信等等</li>
 <li>应用程序框架层：此层提供了Android应用开发的一系列的类库，使开发人员可以进行快速的应用程序开发，方便组件重用<ul>
@@ -268,9 +270,7 @@
 </ul>
 <ul>
 <li><p>系统屏幕密度</p>
-<ul>
-<li>| 密度   | ldpi    | mdpi    | hdpi    | xhdpi    | xxhdpi    |<br>| —— | ——- | ——- | ——- | ——– | ——— |<br>| 密度值 | 120     | 160     | 240     | 320      | 480       |<br>| 分辨率 | 240<em>320 | 320</em>480 | 480<em>800 | 720</em>1280 | 1080*1920 |</li>
-</ul>
+<p>| 密度   | ldpi    | mdpi    | hdpi    | xhdpi    | xxhdpi    |<br>| —— | ——- | ——- | ——- | ——– | ——— |<br>| 密度值 | 120     | 160     | 240     | 320      | 480       |<br>| 分辨率 | 240<em>320 | 320</em>480 | 480<em>800 | 720</em>1280 | 1080*1920 |</p>
 </li>
 <li><p>独立像素密度dp</p>
 <ul>
@@ -316,24 +316,178 @@
 </ul>
 <p>4、图像色彩处理</p>
 <ul>
-<li>Bitmap：在Android中对图片的处理，常用到的数据结构是Bitmap（位图）。它包含了一张图片所有的数据。图片都是有点阵和颜色值组成<ul>
+<li><p>色彩矩阵分析：    </p>
+<ul>
+<li><p>Bitmap：在Android中对图片的处理，常用到的数据结构是Bitmap（位图）。它包含了一张图片所有的数据。图片都是有点阵和颜色值组成</p>
+<ul>
 <li>点阵：一个包含像素的矩阵，每个元素对应图片的一个像素</li>
 <li>颜色值：ARGB。分别对应透明度、红、绿、蓝这四个分量。它们共同决定每个像素显示的颜色</li>
 </ul>
 </li>
-<li>色彩矩阵分析：<ul>
-<li>在色彩处理中，通常使用以下三个角度来描述一个图像<ul>
+<li><p>在色彩处理中，通常使用以下三个角度来描述一个图像</p>
+<ul>
 <li>色调：物体传播的颜色</li>
 <li>饱和度：颜色的纯度，从0（灰）到100%（饱和）来进行描述</li>
 <li>亮度：颜色的相对明暗程度</li>
 </ul>
 </li>
-<li>ColorMatrix（颜色矩阵）：它用来处理图像的色彩效果，它是一个4*5的数字矩阵</li>
-<li>$$ A =  \begin{bmatrix} a &amp; b&amp; c &amp; d&amp; e \ f &amp; g &amp; h &amp; i&amp; j\ k&amp; l &amp; m&amp; n &amp; o \ p&amp; q &amp; r&amp; s &amp; t  \end{bmatrix} $$ $$ C =  \begin{bmatrix} R \ G\ B \ A \ A1 \end{bmatrix} $$ </li>
+<li><p>ColorMatrix（颜色矩阵）：它用来处理图像的色彩效果，它是一个4*5的数字矩阵（如：A）。在Android中对于每个像素点，都会有一个颜色的分量矩阵(如C)来保存颜色的RGBA值。处理图像时，直接使用矩阵乘法运算（如：AC）来处理颜色分量矩阵。<center></center></p>
+<ul>
+<li><img src="/2018/06/04/Android-二/matrix.png" alt="10">    <ul>
+<li>矩阵A中：    <ul>
+<li>第一行的abcde值用来决定新的颜色值中的R（红色）</li>
+<li>第二行的fghij值用来决定新的颜色值中的G（绿色）</li>
+<li>第三行的klmno值用来决定新的颜色值中的B（蓝色）</li>
+<li>第四行的pqrst用来决定新的颜色值中的A（透明度）</li>
+<li>第五列的ejot值分别用来决定每个分类中偏移量（offset）</li>
+</ul>
+</li>
+<li>改变颜色值的方法<ul>
+<li>改变偏移量，即，将ejot的值进行修改</li>
+<li>改变颜色系数，即，将颜色分量中的某个系数值自己或降低（将A矩阵中的b加1）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>色光属性该变：Android系统在<code>ColorMatrix</code>类中提供了改变色光属性的方法</p>
+<ul>
+<li><p>设置色调</p>
+<ul>
+<li><p>setRotate(int axis，float degree)    ：</p>
+<ul>
+<li>第一个参数：分别使用0、1、2来代表Red、Green、Blue三种颜色的处理</li>
+<li>第二个参数：表示需要处理的值</li>
+</ul>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置色调</span></span><br><span class="line">    ColorMatrix colorMatrix = <span class="keyword">new</span> ColorMatrix();</span><br><span class="line">    colorMatrix.setRotate(<span class="number">0</span>,h0);<span class="comment">//设置红色色调</span></span><br><span class="line">    colorMatrix.setRotate(<span class="number">1</span>,h1);<span class="comment">//设置绿色色调</span></span><br><span class="line">    colorMatrix.setRotate(<span class="number">3</span>,h2);<span class="comment">//设置蓝色色调</span></span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>设置饱和度</p>
+<ul>
+<li><p>setSaturation(float sat)：当饱和度为0时，图像就会变灰色</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置饱和度</span></span><br><span class="line">      ColorMatrix saturationMatrix = <span class="keyword">new</span> ColorMatrix();</span><br><span class="line">      saturationMatrix.setSaturation(sat);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>设置亮度</p>
+<ul>
+<li><p>setScale(lum,lum,lum,1)：</p>
+<ul>
+<li>当三原色以相同比例进行混合时，就会显示白色，通过此原理来改变一个图像的亮度：</li>
+<li>四个参数分别对应RGBA亮度</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置亮度</span></span><br><span class="line">      ColorMatrix lumMatrix1 = <span class="keyword">new</span> ColorMatrix();</span><br><span class="line">      lumMatrix1.setScale(rScale,gScale,bScale，aScale);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>像素点分析：</p>
+<ul>
+<li><p>可以通过改变每个像素点的具体ARGB值来更加精确的处理图像，但，原始图片是不能修改，所以一般根据原始图片生成一张新的图片</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据原始图片生成新的图片</span></span><br><span class="line">Bitmap bmp = bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>可以通过Bitmap.getPixels()方法提取整个Bitmap中的像素点</p>
+<ul>
+<li><p>bitmap.getPixels(pixels,offset,stride,x,y,width,height)：</p>
+<ul>
+<li>第一个参数(pixels)：接收bitmap颜色值得数据</li>
+<li>第二个参数(offset)：写入pixels[]中的第一个像素索引</li>
+<li>第三个参数(stride)：pixels[]的行间距</li>
+<li>第四个参数(x)：表示从bitmap读取的一个像素的x坐标</li>
+<li>第五个参数(y)：表示从bitmap读取的一个像素的y坐标</li>
+<li>第六个参数(width)：表示从每一行读取的像素宽度</li>
+<li>第七个参数(height)：表示读取的行数</li>
+</ul>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据原始图片生成新的图片</span></span><br><span class="line">     Bitmap bmp = bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);</span><br><span class="line">  </span><br><span class="line">     <span class="comment">//获取图片所有像素点</span></span><br><span class="line">     bitmap.getPixels(oriPixels, <span class="number">0</span>, bitmap.getWidth(), <span class="number">0</span>, <span class="number">0</span>, width, height);</span><br><span class="line">     <span class="comment">//获取每个像素具体的ARGB值</span></span><br><span class="line">     <span class="keyword">int</span> length = oriPixels.length;</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">        color =   oriPixels[i];</span><br><span class="line">        colorR = Color.red(color);</span><br><span class="line">        colorG = Color.green(color);</span><br><span class="line">        colorB = Color.blue(color);</span><br><span class="line">        colorA = Color.alpha(color);</span><br><span class="line">  <span class="comment">//        .........处理.....</span></span><br><span class="line">         newPixels[i] =  Color.argb(colorA,colorR,colorG,colorB);</span><br><span class="line">  </span><br><span class="line">     &#125;</span><br><span class="line">     bmp.setPixels(newPixels,<span class="number">0</span>,width,<span class="number">0</span>,<span class="number">0</span>,width,height);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>5、图像之画笔特效</p>
+<ul>
+<li><p>Shader：着色器、渲染器。用来实现一系列的渐变、渲染效果</p>
+<ul>
+<li><p>BitmapShader：位图Shader。通过Paint对画布进行指定Bitmap填充，效果有点像ps的图像填充渐变</p>
+<ul>
+<li><p>填充模式</p>
+<ul>
+<li>CLAMP：拉伸。拉伸图片的最后一个像素，不断重复</li>
+<li>REPEAT：重复。横向、纵向不断重复平铺图片</li>
+<li>MIRROR：横向不断翻转重复平铺、纵向不断翻转重复平铺</li>
+</ul>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化画笔，biamap及Shader</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mPaint = <span class="keyword">new</span> Paint();</span><br><span class="line">        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg);</span><br><span class="line">           <span class="comment">//Mode分别为：CLAMP、REPEAT、MIRROR</span></span><br><span class="line">        BitmapShader clampShader = <span class="keyword">new</span> BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);</span><br><span class="line">        mPaint.setShader(clampShader);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//绘制</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">        canvas.drawCircle(<span class="number">500</span>,<span class="number">250</span>,<span class="number">200</span>,mPaint);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><img src="/2018/06/04/Android-二/shader_mode.png" alt=""></p>
+</li>
+</ul>
+</li>
+<li><p>LinearGradient：线性Shader</p>
+<ul>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//LinearGradient</span></span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">LinearGradientShader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mPaint = <span class="keyword">new</span> Paint();</span><br><span class="line">        LinearGradient linearGradientShader = <span class="keyword">new</span> LinearGradient(<span class="number">0</span>, <span class="number">0</span>, <span class="number">400</span>, <span class="number">400</span>, Color.BLUE, Color.YELLOW, Shader.TileMode.REPEAT);</span><br><span class="line">        mPaint.setShader(linearGradientShader);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">     <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">        canvas.drawCircle(<span class="number">250</span>,<span class="number">250</span>,<span class="number">200</span>,mPaint);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>RadialGradient：光束Shader</p>
+</li>
+<li><p>SweepGradient：梯度Shader</p>
+</li>
+<li><p>ComPoseShader：混合Shader</p>
+</li>
+</ul>
+</li>
+<li><p>PathEffect：用各种笔触效果绘制一个路径</p>
+<ul>
+<li><p>没效果</p>
+</li>
+<li><p>CornerPathEffect：将拐角变得圆滑</p>
+</li>
+<li><p>DiscretePathEffect：使线段上产生许多杂点</p>
+</li>
+<li><p>DashPathEffect：绘制虚线</p>
+</li>
+<li><p>PathDashPathEffect：也是绘制虚线，但，可是设置显示点的图形，如，方形点的虚线、圆形点的虚线</p>
+</li>
+<li><p>ComposePathEffect：将任意两种路径特性组合起来形成新的效果</p>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//初始化Paint和path</span><br><span class="line">private void init() &#123;</span><br><span class="line">     mPathEffects = new PathEffect[6];</span><br><span class="line">     initPaint();</span><br><span class="line">     initPathEffect();</span><br><span class="line">     path = new Path();</span><br><span class="line">     path.moveTo(100,100);</span><br><span class="line">     path.lineTo(200,150);</span><br><span class="line">     path.lineTo(250,440);</span><br><span class="line">     //</span><br><span class="line">  //        mCornerPathEffect = new CornerPathEffect(5);</span><br><span class="line">  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>6、SufaceView</p>
+<ul>
+<li>与View的区别<ul>
+<li>View：适用于主动更新的情况；SufaceView主要适用于被动更新</li>
+<li>View在主线程中对画面进行刷新；SurfaceView通常通过一个子线程来进行页面的刷新</li>
+<li>View在绘图时没有使用双缓冲机制，SurfaceView在底层实现机制中已经实现了双缓冲机制</li>
+</ul>
+</li>
+<li>使用<ul>
+<li>创建SurfaceView：创建自定义MySurfaceView继承SurfaceView</li>
+<li>实现SurfaceHolder.Callback和Runnable接口</li>
+<li>初始化SurfaceView：即对SurfaceHolder进行初始化</li>
+<li>使用SurfaceView：通过lockCanvas()方法，获得Canvas的绘图对象。</li>
 </ul>
 </li>
 </ul>
 <p>10</p>
+<p>​    </p>
 
       
 
